@@ -1,11 +1,16 @@
-import { VFC } from "hoist-non-react-statics/node_modules/@types/react";
+import { useContext, VFC } from "react";
 import { useHistory } from "react-router";
+import { AuthUserContext } from "../../providers/AuthUserProvider";
 
 export const Home: VFC = () => {
   const history = useHistory();
+
+  const { user } = useContext(AuthUserContext);
+
   const handleLogout = () => {
     history.push("/");
   };
+
   return (
     <div>
       <h1>メイン画面</h1>
