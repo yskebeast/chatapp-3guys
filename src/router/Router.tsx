@@ -1,4 +1,4 @@
-import { Route, Switch } from "react-router";
+import { Route, Switch } from "react-router-dom";
 
 import { AuthUserProvider } from "../providers/AuthUserProvider";
 import { SignIn } from "../components/pages/SignIn";

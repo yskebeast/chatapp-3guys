@@ -1,5 +1,4 @@
-import { ReactNode } from "hoist-non-react-statics/node_modules/@types/react"
-import {createContext} from "react"
+import {createContext, ReactNode} from "react"
 
 export const AuthUserContext = createContext<any>({})
 

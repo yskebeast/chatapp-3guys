@@ -1,7 +1,7 @@
-import { ReactNode, VFC } from "hoist-non-react-statics/node_modules/@types/react";
+import { ReactNode, VFC } from "react";
 
 type Props = {
-  children: ReactNode
+  children: ReactNode;
 };
 
 export const AuthButton: VFC<Props> = (props) => {
