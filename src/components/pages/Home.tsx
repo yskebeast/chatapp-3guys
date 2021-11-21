@@ -1,20 +1,41 @@
-import { useContext, VFC } from "react";
+import { memo, useState, VFC } from "react";
 import { useHistory } from "react-router";
-import { AuthUserContext } from "../../providers/AuthUserProvider";
+import { auth, db } from "../../firebase";
+import { signOut } from "@firebase/auth";
 
-export const Home: VFC = () => {
+import { useAuthUserContext } from "../../providers/AuthUserProvider";
+import { collection, getDocs, query } from "@firebase/firestore";
+
+export const Home: VFC = memo(() => {
   const history = useHistory();
 
-  const { user } = useContext(AuthUserContext);
+  const [data, setData] = useState({});
+
+  const uid = auth.currentUser?.uid;
+  // console.log(uid);
+
+  const user = useAuthUserContext();
+  // console.log(user);
 
   const handleLogout = () => {
-    history.push("/");
+    signOut(auth).then(() => {
+      history.push("/");
+    });
+  };
+
+  const get = async () => {
+    const q = query(collection(db, "users"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      setData(doc.data());
+    });
   };
 
   return (
     <div>
-      <h1>メイン画面</h1>
+      <h1>メイン画面{auth.currentUser?.uid}</h1>
       <button onClick={handleLogout}>ログアウト</button>
+      <button onClick={get}>get data</button>
     </div>
   );
-};
+});
