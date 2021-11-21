@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, VFC } from "react";
+import { ChangeEvent, memo, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
@@ -11,8 +11,10 @@ const center = {
   margin: "0 auto",
 };
 
-export const SignIn: VFC = () => {
+export const SignIn: VFC = memo(() => {
   const history = useHistory();
+
+  const uid = auth.currentUser?.uid;
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -29,9 +31,10 @@ export const SignIn: VFC = () => {
     e.preventDefault();
     await signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        history.push("/home");
+        history.push(`/home/${auth.currentUser?.uid}`);
       })
       .catch((err) => {
+        setPassword("");
         setError(err.message);
       });
   };
@@ -68,4 +71,4 @@ export const SignIn: VFC = () => {
       </form>
     </div>
   );
-};
+});
