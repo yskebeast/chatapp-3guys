@@ -1,28 +1,43 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useHistory } from "react-router";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "@firebase/auth";
 
-type ContextState = {
-  user: string | null;
-}
+const AuthUserContext = createContext({});
 
-export const AuthUserContext = createContext({} as ContextState);
+export const useAuthUserContext = () => {
+  return useContext(AuthUserContext);
+};
 
 export const AuthUserProvider = (props: { children: ReactNode }) => {
   const { children } = props;
 
-  const [user, setUser] = useState<any>("");
+  const history = useHistory();
+
+  const [user, setUser] = useState<any>({});
 
   useEffect(() => {
     const unsubscribed = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      if (user) {
+        history.push("/home");
+      } else {
+        history.push("/");
+      }
     });
     return () => {
       unsubscribed();
     };
-  }, []);
+  }, [history]);
 
   return (
     <AuthUserContext.Provider value={user}>{children}</AuthUserContext.Provider>
   );
 };
+
