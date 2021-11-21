@@ -26,7 +26,7 @@ export const AuthUserProvider = (props: { children: ReactNode }) => {
     const unsubscribed = onAuthStateChanged(auth, (user) => {
       setUser(user);
       if (user) {
-        history.push("/home");
+        history.push(`/home/${auth.currentUser?.uid}`);
       } else {
         history.push("/");
       }
