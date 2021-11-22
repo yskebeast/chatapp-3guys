@@ -63,7 +63,7 @@ export const SignIn = memo(() => {
             placeholder="パスワード"
             value={password}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setEmail(e.target.value);
+              setPassword(e.target.value);
               // dispach(email(e.target.value));
             }}
           />
