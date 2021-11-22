@@ -4,15 +4,13 @@ import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 
-import { AuthButton } from "../atoms/button/AuthButton";
-import { useDispatch, useSelector } from "react-redux";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { certificationState } from "../../features/userSlice";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Container from "@mui/material/Container";
+import { Alert, Avatar, Button, CssBaseline, TextField } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-const center = {
-  width: "300px",
-  margin: "0 auto",
-};
+const theme = createTheme();
 
 export const SignIn = memo(() => {
   const history = useHistory();
@@ -20,10 +18,6 @@ export const SignIn = memo(() => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
-
-  // const { text } = useSelector((state) => state.certification);
-  // const text = useAppSelector((state) => state.certification.text);
-  // const dispach = useAppDispatch();
 
   const handleSignIn = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -34,46 +28,74 @@ export const SignIn = memo(() => {
       .catch((err) => {
         setPassword("");
         setError(err.message);
-        // dispach(error(err.message));
       });
   };
 
   return (
-    <div style={center}>
-      <h1>ログイン</h1>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSignIn}>
-        <div>
-          <input
-            name="email"
-            type="email"
-            placeholder="メールアドレス"
-            value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setEmail(e.target.value);
-              // dispach(email(e.target.value));
-            }}
-          />
-        </div>
-        <div>
-          <input
-            name="password"
-            type="password"
-            placeholder="パスワード"
-            value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setPassword(e.target.value);
-              // dispach(email(e.target.value));
-            }}
-          />
-        </div>
-        <div>
-          <AuthButton>ログイン</AuthButton>
-        </div>
-        <p>
-          新規登録は<Link to="/signup">こちら</Link>から
-        </p>
-      </form>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+          >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
+          <Typography
+            sx={{ textAlign: "center", my: 1 }}
+            component="h1"
+            variant="h5"
+            >
+            ログイン
+          </Typography>
+          {/* {error && <p>{error}</p>} */}
+            {error && <Alert severity="error">{error}</Alert>}
+          <form  onSubmit={handleSignIn}>
+            <TextField
+              id="outlined-basic"
+              label="メールアドレス"
+              margin="normal"
+              variant="outlined"
+              name="email"
+              type="email"
+              fullWidth
+              required
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <TextField
+              id="outlined-basic"
+              label="パスワード"
+              margin="normal"
+              variant="outlined"
+              name="password"
+              type="password"
+              fullWidth
+              required
+              value={password}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, mb: 2 }}
+              type="submit"
+            >
+              ログイン
+            </Button>
+            <Typography component="p" sx={{ textAlign: "right" }}>
+              新規登録は<Link to="/signup">こちら</Link>から
+            </Typography>
+          </form>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 });
