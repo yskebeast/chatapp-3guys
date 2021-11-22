@@ -6,7 +6,6 @@ import { signInWithEmailAndPassword } from "@firebase/auth";
 
 import { AuthButton } from "../atoms/button/AuthButton";
 import { useDispatch, useSelector } from "react-redux";
-import { email, password, error } from "../../features/certificationSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { certificationState } from "../../features/certificationSlice";
 
