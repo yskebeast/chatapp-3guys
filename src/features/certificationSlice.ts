@@ -26,7 +26,7 @@ import { RootState } from "../app/store";
 
 // export default certificationSlice.reducer;
 
-interface certificationState {
+export type certificationState = {
   text: string
 }
 
