@@ -7,7 +7,7 @@ import { signInWithEmailAndPassword } from "@firebase/auth";
 import { AuthButton } from "../atoms/button/AuthButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { certificationState } from "../../features/certificationSlice";
+import { certificationState } from "../../features/userSlice";
 
 const center = {
   width: "300px",
