@@ -1,9 +1,9 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import certificationReducer from '../features/certificationSlice'
+import userReducer from '../features/userSlice'
 
 export const store = configureStore({
   reducer: {
-    certification: certificationReducer
+    user: userReducer
   },
 });
 

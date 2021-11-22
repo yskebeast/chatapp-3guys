@@ -27,29 +27,32 @@ import { RootState } from "../app/store";
 // export default certificationSlice.reducer;
 
 export type certificationState = {
-  text: string
+  user:{username: string, uid: string, selfIntro: string,
+}}
+
+export type certificationState2 = {
+  username: string,
+  uid: string,
+  selfIntro: string,
 }
 
 const initialState: certificationState = {
-  text: ""
-} as certificationState
+  user: {username: "", uid: "", selfIntro: "",}
+} 
 
-export const certificationSlice = createSlice({
-  name: "certification",
+export const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
-    email: (state, action: PayloadAction<string>) => {
-      state.text = action.payload;
+    login: (state, action: PayloadAction<certificationState2>) => {
+      state.user = action.payload;
     },
-    password: (state, action: PayloadAction<string>) => {
-      state.text = action.payload;
-    },
-    error: (state, action: PayloadAction<string>) => {
-      state.text = action.payload;
-    },
+    logout:(state) => {
+      state.user = {username:"", uid: "", selfIntro:""}
+    }
   },
 });
 
-export const { email, password, error } = certificationSlice.actions;
-export const selectText = (state: RootState) => state.certification.text
-export default certificationSlice.reducer;
+export const { login, logout } = userSlice.actions;
+export const selectUser = (state: RootState) => state.user.user
+export default userSlice.reducer;
