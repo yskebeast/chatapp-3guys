@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, VFC } from "react";
+import { ChangeEvent, memo, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { auth, db } from "../../firebase";
@@ -12,16 +12,17 @@ const center = {
   margin: "0 auto",
 };
 
-export const SignUp: VFC = () => {
+export const SignUp: VFC = memo(() => {
   const history = useHistory();
+
+  // 変数にするとドキュメントのuidがundefinedになる
+  // const uid = auth.currentUser?.uid;
 
   const [name, setName] = useState<string>("");
   const [selfIntro, setSelfIntro] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
-
-  const uid = auth.currentUser?.uid;
 
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -40,11 +41,11 @@ export const SignUp: VFC = () => {
     e.preventDefault();
     await createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        history.push("/home");
-        setDoc(doc(db, "users", `${uid}`), {
+        setDoc(doc(db, "users", `${auth.currentUser?.uid}`), {
           name: name,
           selfIntro: selfIntro,
         });
+        history.push(`/home/${auth.currentUser?.uid}`);
       })
       .catch((err) => {
         setError(err.message);
@@ -100,4 +101,4 @@ export const SignUp: VFC = () => {
       </form>
     </div>
   );
-};
+});
