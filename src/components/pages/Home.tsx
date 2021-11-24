@@ -8,6 +8,8 @@ import { selectUser } from "../../features/userSlice";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   onSnapshot,
   orderBy,
   query,
@@ -23,7 +25,6 @@ export const Home: VFC = memo(() => {
   const [messages, setMessages] = useState<Array<any>>([]);
   const [tweet, setTweet] = useState("");
   const [like, setLike] = useState<number>(0);
-  const [f, sf] = useState(false);
   const [close, setClose] = useState(false);
 
   useEffect(() => {
@@ -51,15 +52,12 @@ export const Home: VFC = memo(() => {
   const handleLike = (index: any) => {};
 
   const handleSend = (index: any) => {
-    setClose(!close)
-    if (!f) {
-      sf(!false);
-    } else {
-      sf(false);
-    }
+    setClose(!close);
   };
 
-  const handleReply = () => {};
+  const handleReply = async () => {
+
+  };
 
   const handleTweet = async () => {
     const timestamp = serverTimestamp();
@@ -93,10 +91,10 @@ export const Home: VFC = memo(() => {
           return (
             <div key={index}>
               <li>{message}</li>
-              {f && (
+              {close && (
                 <div>
                   <ul>
-                    <li>hello</li>
+                    <li>リプライ</li>
                   </ul>
                   <div>
                     <input type="text" />
@@ -106,7 +104,7 @@ export const Home: VFC = memo(() => {
               )}
               <button onClick={() => handleLike(index)}>いいね</button>
               <button onClick={() => handleSend(index)}>
-                {close ? <p>返信</p> : <p>閉じる</p>}
+                {close ? <p>閉じる</p> : <p>返信</p>}
               </button>
             </div>
           );
