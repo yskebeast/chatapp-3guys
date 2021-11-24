@@ -36,6 +36,7 @@ export const AuthUserProvider = (props: { children: ReactNode }) => {
           username: docSnap.data().name,
           uid: user.uid,
           selfIntro: docSnap.data().selfIntro,
+          birth: ''
         })
       )
     } else {

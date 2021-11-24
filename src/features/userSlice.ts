@@ -2,8 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { VFC } from "react";
 import { RootState } from "../app/store";
 
-
-
 // export const certificationSlice = createSlice({
 //   name: "certification",
 //   initialState: certificationState {
@@ -27,18 +25,19 @@ import { RootState } from "../app/store";
 // export default certificationSlice.reducer;
 
 export type certificationState = {
-  user:{username: string, uid: string, selfIntro: string,
-}}
+  user: { username: string; uid: string; selfIntro: string; birth: string };
+};
 
 export type certificationState2 = {
-  username: string,
-  uid: string,
-  selfIntro: string,
-}
+  username: string;
+  uid: string;
+  selfIntro: string;
+  birth: string;
+};
 
 const initialState: certificationState = {
-  user: {username: "", uid: "", selfIntro: "",}
-} 
+  user: { username: "", uid: "", selfIntro: "", birth: "" },
+};
 
 export const userSlice = createSlice({
   name: "user",
@@ -47,12 +46,12 @@ export const userSlice = createSlice({
     login: (state, action: PayloadAction<certificationState2>) => {
       state.user = action.payload;
     },
-    logout:(state) => {
-      state.user = {username:"", uid: "", selfIntro:""}
-    }
+    logout: (state) => {
+      state.user = { username: "", uid: "", selfIntro: "", birth:"" };
+    },
   },
 });
 
 export const { login, logout } = userSlice.actions;
-export const selectUser = (state: RootState) => state.user.user
+export const selectUser = (state: RootState) => state.user.user;
 export default userSlice.reducer;
