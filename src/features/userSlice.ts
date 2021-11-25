@@ -35,6 +35,10 @@ export type certificationState2 = {
   birth: string;
 };
 
+export type certificationState3 = {
+    username:any
+}
+
 const initialState: certificationState = {
   user: { username: "", uid: "", selfIntro: "", birth: "" },
 };
@@ -48,6 +52,9 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       state.user = { username: "", uid: "", selfIntro: "", birth:"" };
+    },
+    changeName:(state, action:PayloadAction<certificationState3>) => {
+        state.user = action.payload
     },
   },
 });
