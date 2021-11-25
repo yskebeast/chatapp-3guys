@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import React, { ChangeEvent, memo, VFC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
-import { selectUser } from "../../features/userSlice";
+import { changeName, selectUser } from "../../features/userSlice";
 
 const style = {
   position: "absolute",
@@ -68,9 +68,9 @@ export const SelfIntro: VFC = memo(() => {
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
               value={loginUser.username}
-              // onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              //   dispach(loginUser.username(e.target.value))
-              // }
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                dispach(changeName(e.target.value))
+              }
             />
           </Box>
           <Box>

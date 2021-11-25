@@ -53,12 +53,12 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.user = { username: "", uid: "", selfIntro: "", birth:"" };
     },
-    changeName:(state, action:PayloadAction<certificationState3>) => {
-        state.user = action.payload
+    changeName:(state, action:PayloadAction<string>) => {
+        state.user.username = action.payload
     },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, changeName } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.user;
 export default userSlice.reducer;
