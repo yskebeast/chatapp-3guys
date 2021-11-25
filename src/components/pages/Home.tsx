@@ -16,6 +16,7 @@ import {
   serverTimestamp,
 } from "@firebase/firestore";
 
+import { Post } from "../organisms/Post";
 import "../../App.css";
 
 export const Home: VFC = memo(() => {
@@ -24,8 +25,6 @@ export const Home: VFC = memo(() => {
 
   const [messages, setMessages] = useState<Array<any>>([]);
   const [tweet, setTweet] = useState("");
-  const [like, setLike] = useState<number>(0);
-  const [close, setClose] = useState(false);
 
   useEffect(() => {
     const r = collection(db, "board");
@@ -33,7 +32,11 @@ export const Home: VFC = memo(() => {
     onSnapshot(q, (querySnapshot) => {
       const arr: Array<any> = [];
       querySnapshot.forEach((doc) => {
-        arr.push(doc.data().tweet);
+        arr.push({
+          tweet: doc.data().tweet,
+          name: doc.data().name,
+          id: doc.id,
+        });
       });
       setMessages(arr);
     });
@@ -49,15 +52,7 @@ export const Home: VFC = memo(() => {
     history.push(`/selfintro/${auth.currentUser?.uid}`);
   };
 
-  const handleLike = (index: any) => {};
-
-  const handleSend = (index: any) => {
-    setClose(!close);
-  };
-
-  const handleReply = async () => {
-
-  };
+  const handleReply = async () => {};
 
   const handleTweet = async () => {
     const timestamp = serverTimestamp();
@@ -82,42 +77,30 @@ export const Home: VFC = memo(() => {
           justifyContent: "space-around",
         }}
       >
-        <h1>{loginUser.username}</h1>
         <button onClick={handleIntro}>自己紹介</button>
         <button onClick={handleLogout}>ログアウト</button>
       </div>
-      <ul>
-        {messages.map((message, index) => {
-          return (
-            <div key={index}>
-              <li>{message}</li>
-              {close && (
-                <div>
-                  <ul>
-                    <li>リプライ</li>
-                  </ul>
-                  <div>
-                    <input type="text" />
-                    <button onClick={handleReply}>送信</button>
-                  </div>
-                </div>
-              )}
-              <button onClick={() => handleLike(index)}>いいね</button>
-              <button onClick={() => handleSend(index)}>
-                {close ? <p>閉じる</p> : <p>返信</p>}
-              </button>
-            </div>
-          );
-        })}
-      </ul>
-      <input
-        type="text"
-        value={tweet}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setTweet(e.target.value)
-        }
-      />
-      <button onClick={handleTweet}>追加</button>
+        <h1>{loginUser.username}</h1>
+      <div style={{ width: "400px", display: "flex", margin: "0 auto" }}>
+        <input
+          style={{ width: "300px" }}
+          type="text"
+          value={tweet}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setTweet(e.target.value)
+          }
+        />
+        <button style={{ margin: "0, auto" }} onClick={handleTweet}>
+          追加
+        </button>
+      </div>
+      <div style={{ width: "500px", margin: "0 auto" }}>
+        <ul style={{ listStyle: "none" }}>
+          {messages.map((message, index) => {
+            return <Post key={index} index={index} message={message} />;
+          })}
+        </ul>
+      </div>
     </div>
   );
 });
