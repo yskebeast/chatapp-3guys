@@ -1,7 +1,8 @@
-import { memo, useState, VFC } from "react";
+import { memo, VFC } from "react";
 import { useHistory } from "react-router";
-import { auth, db } from "../../firebase";
+import { auth } from "../../firebase";
 import { signOut } from "@firebase/auth";
+
 
 import { useAuthUserContext } from "../../providers/AuthUserProvider";
 import { collection, getDocs, query } from "@firebase/firestore";
@@ -13,28 +14,14 @@ export const Home: VFC = memo(() => {
   const history = useHistory();
   const loginUser = useSelector(selectUser);
 
-
-  const [data, setData] = useState({});
-
-  const uid = auth.currentUser?.uid;
-  // console.log(uid);
-
-  const user = useAuthUserContext();
-  // console.log(user);
-
   const handleLogout = () => {
     signOut(auth).then(() => {
       history.push("/");
     });
   };
 
-
-  const get = async () => {
-    const q = query(collection(db, "users"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setData(doc.data());
-    });
+  const handleIntro = () => {
+    history.push(`/selfintro/${auth.currentUser?.uid}`);
   };
 
   return (
@@ -45,7 +32,9 @@ export const Home: VFC = memo(() => {
       <p>ユーザーネーム：{loginUser.username}</p>
       <p>自己紹介：{loginUser.selfIntro}</p>
       <button onClick={handleLogout}>ログアウト</button>
-      <button onClick={get}>get data</button>
+      <div>
+        <button onClick={handleIntro}>自己紹介</button>
+      </div>
     </div>
   );
 });
