@@ -28,7 +28,7 @@ export const Home: VFC = memo(() => {
   const [close, setClose] = useState(false);
 
   useEffect(() => {
-    const r = collection(db, "board", "common", "messages");
+    const r = collection(db, "board");
     const q = query(r, orderBy("time", "desc"));
     onSnapshot(q, (querySnapshot) => {
       const arr: Array<any> = [];
@@ -63,7 +63,7 @@ export const Home: VFC = memo(() => {
     const timestamp = serverTimestamp();
     const newMessages = [...messages, tweet];
     setMessages(newMessages);
-    const ref = collection(db, "board", "common", "messages");
+    const ref = collection(db, "board");
     await addDoc(ref, {
       tweet: tweet,
       time: timestamp,
