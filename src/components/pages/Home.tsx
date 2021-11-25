@@ -12,7 +12,7 @@ export const Home: VFC = memo(() => {
   const history = useHistory();
   const loginUser = useSelector(selectUser);
 
-
+  
   const [data, setData] = useState({});
 
   const uid = auth.currentUser?.uid;
