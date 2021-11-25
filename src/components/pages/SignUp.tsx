@@ -7,35 +7,14 @@ import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { AuthButton } from "../atoms/button/AuthButton";
 import { doc, setDoc } from "@firebase/firestore";
 
-const center = {
-  width: "300px",
-  margin: "0 auto",
-};
-
 export const SignUp: VFC = memo(() => {
   const history = useHistory();
-
-  // 変数にするとドキュメントのuidがundefinedになる
-  // const uid = auth.currentUser?.uid;
 
   const [name, setName] = useState<string>("");
   const [selfIntro, setSelfIntro] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
-
-  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-  const handleChangeSelfIntro = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setSelfIntro(e.target.value);
-  };
-  const handleChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-  const handleChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   const handleSignUp = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -53,7 +32,7 @@ export const SignUp: VFC = memo(() => {
   };
 
   return (
-    <div style={center}>
+    <div>
       <h1>アカウントを作成</h1>
       {error && <p>{error}</p>}
       <form onSubmit={handleSignUp}>
@@ -63,7 +42,9 @@ export const SignUp: VFC = memo(() => {
             type="text"
             placeholder="名前"
             value={name}
-            onChange={handleChangeName}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setName(e.target.value);
+            }}
           />
         </div>
         <div>
@@ -71,7 +52,9 @@ export const SignUp: VFC = memo(() => {
             name="text"
             placeholder="自己紹介"
             value={selfIntro}
-            onChange={handleChangeSelfIntro}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+              setSelfIntro(e.target.value);
+            }}
           />
         </div>
         <div>
@@ -80,7 +63,9 @@ export const SignUp: VFC = memo(() => {
             type="email"
             placeholder="メールアドレス"
             value={email}
-            onChange={handleChangeEmail}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setEmail(e.target.value);
+            }}
           />
         </div>
         <div>
@@ -89,7 +74,9 @@ export const SignUp: VFC = memo(() => {
             type="password"
             placeholder="パスワード"
             value={password}
-            onChange={handleChangePassword}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setPassword(e.target.value);
+            }}
           />
         </div>
         <div>
