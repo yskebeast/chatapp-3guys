@@ -35,10 +35,6 @@ export type certificationState2 = {
   birth: string;
 };
 
-export type certificationState3 = {
-    username:any
-}
-
 const initialState: certificationState = {
   user: { username: "", uid: "", selfIntro: "", birth: "" },
 };
@@ -51,14 +47,21 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
     logout: (state) => {
-      state.user = { username: "", uid: "", selfIntro: "", birth:"" };
+      state.user = { username: "", uid: "", selfIntro: "", birth: "" };
     },
-    changeName:(state, action:PayloadAction<string>) => {
-        state.user.username = action.payload
+    changeName: (state, action: PayloadAction<string>) => {
+      state.user.username = action.payload;
+    },
+    changeSelfIntro: (state, action: PayloadAction<string>) => {
+      state.user.selfIntro = action.payload;
+    },
+    changeBirth: (state, action: PayloadAction<string>) => {
+      state.user.birth = action.payload;
     },
   },
 });
 
-export const { login, logout, changeName } = userSlice.actions;
+export const { login, logout, changeName, changeSelfIntro, changeBirth } =
+  userSlice.actions;
 export const selectUser = (state: RootState) => state.user.user;
 export default userSlice.reducer;
