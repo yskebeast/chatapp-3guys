@@ -1,23 +1,12 @@
-import { Button, createTheme, TextField } from "@mui/material";
+import { Avatar, Button, TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/system";
 import Modal from "@mui/material/Modal";
 import React, { ChangeEvent, memo, VFC } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
-import { changeName, selectUser } from "../../features/userSlice";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { changeBirth, changeName, changeSelfIntro, selectUser } from "../../features/userSlice";
+import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
 
 export const SelfIntro: VFC = memo(() => {
   const loginUser = useSelector(selectUser);
@@ -29,18 +18,51 @@ export const SelfIntro: VFC = memo(() => {
 
   return (
     <Box sx={{ width: "60%", marginX: "auto", textAlign: "center" }}>
-      <h1>プロフィール</h1>
-      <div>
-        <img
-          style={{ width: "150px", height: "150px", background: "white" }}
-          src=""
-          alt=""
+      <Typography
+        component="h1"
+        sx={{ fontSize: "30px", my: 3, fontWeight: "bold" }}
+      >
+        プロフィール
+      </Typography>
+      <Box
+        sx={{
+          my: 5,
+          display: "flex",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        <Avatar
+          src="/broken-image.jpg"
+          style={{ width: "150px", height: "150px" }}
         />
-      </div>
-      <Button onClick={handleOpen}>編集</Button>
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 0,
+            ml: 17,
+          }}
+        >
+          <Button
+            sx={{
+              width: 20,
+              borderRadius: "40%",
+              height: 50,
+            }}
+            style={{ backgroundColor: "#f1f1f1" }}
+          >
+            <AddAPhotoRoundedIcon sx={{ color: "black", width: 20 }} />
+          </Button>
+        </Box>
+      </Box>
+      <Button
+        sx={{ display: "block", marginLeft: "auto" }}
+        onClick={handleOpen}
+      >
+        編集
+      </Button>
       <Modal
         open={open}
-        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -57,7 +79,12 @@ export const SelfIntro: VFC = memo(() => {
             p: 4,
           }}
         >
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ textAlign: "center", fontWeight: "bold" }}
+          >
             プロフィールを編集
           </Typography>
           <Box sx={{ my: 3 }}>
@@ -81,9 +108,9 @@ export const SelfIntro: VFC = memo(() => {
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
               value={loginUser.selfIntro}
-              // onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              //   dispach(loginUser.selfIntro(e.target.value))
-              // }
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                dispach(changeSelfIntro(e.target.value))
+              }
             />
           </Box>
           <Box sx={{ my: 3 }}>
@@ -93,50 +120,56 @@ export const SelfIntro: VFC = memo(() => {
             <TextField
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
-              value="1999年11月11日"
-              // onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              //   dispach(loginUser.selfIntro(e.target.value))
-              // }
+              value={loginUser.birth}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                dispach(changeBirth(e.target.value))
+              }
             />
           </Box>
+          <Button
+            sx={{ display: "block", marginLeft: "auto" }}
+            onClick={handleClose}
+          >
+            保存
+          </Button>
         </Box>
       </Modal>
-      <div>
-        <p style={{ textAlign: "left" }}>名前</p>
-        <TextField
-          sx={{ width: "100%" }}
-          type="text"
-          value={loginUser.username}
-          id="outlined-read-only-input"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </div>
-      <div>
-        <p style={{ textAlign: "left" }}>自己紹介</p>
-        <TextField
-          sx={{ width: "100%" }}
-          type="text"
-          value={loginUser.selfIntro}
-          id="outlined-read-only-input"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </div>
-      <div>
-        <p style={{ textAlign: "left" }}>生年月日</p>
-        <TextField
-          sx={{ width: "100%" }}
-          type="text"
-          value="1999年11月11日"
-          id="outlined-read-only-input"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </div>
+      <Typography component="p" sx={{ textAlign: "left", mb: 1 }}>
+        名前
+      </Typography>
+      <TextField
+        sx={{ width: "100%", mb: 2 }}
+        type="text"
+        value={loginUser.username}
+        id="outlined-read-only-input"
+        InputProps={{
+          readOnly: true,
+        }}
+      />
+      <Typography component="p" sx={{ textAlign: "left", mb: 1 }}>
+        自己紹介
+      </Typography>
+      <TextField
+        sx={{ width: "100%", mb: 2 }}
+        type="text"
+        value={loginUser.selfIntro}
+        id="outlined-read-only-input"
+        InputProps={{
+          readOnly: true,
+        }}
+      />
+      <Typography component="p" sx={{ textAlign: "left", mb: 1 }}>
+        生年月日
+      </Typography>
+      <TextField
+        sx={{ width: "100%" }}
+        type="text"
+        value={loginUser.birth}
+        id="outlined-read-only-input"
+        InputProps={{
+          readOnly: true,
+        }}
+      />
     </Box>
   );
 });
