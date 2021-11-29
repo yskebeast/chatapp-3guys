@@ -25,20 +25,20 @@ export const Home: VFC = memo(() => {
   const [tweet, setTweet] = useState("");
 
   useEffect(() => {
-      const board = collection(db, "board");
-      const q = query(board, orderBy("time", "desc"));
-      onSnapshot(q, (querySnapshot) => {
-        const arr: Array<any> = [];
-        querySnapshot.forEach((doc) => {
-          arr.push({
-            id: doc.id,
-            tweet: doc.data().tweet,
-            name: doc.data().name,
-            uid: doc.data().user,
-          });
+    const board = collection(db, "board");
+    const q = query(board, orderBy("time", "desc"));
+    onSnapshot(q, (querySnapshot) => {
+      const arr: Array<any> = [];
+      querySnapshot.forEach((doc) => {
+        arr.push({
+          id: doc.id,
+          tweet: doc.data().tweet,
+          name: doc.data().name,
+          uid: doc.data().user,
         });
-        setMessages(arr);
       });
+      setMessages(arr);
+    });
   }, []);
 
   const handleLogout = () => {
@@ -103,7 +103,7 @@ export const Home: VFC = memo(() => {
       <div style={{ width: "500px", margin: "0 auto" }}>
         <ul style={{ listStyle: "none" }}>
           {messages.map((message, index) => {
-            return <Post key={index} message={message} />;
+            return <Post key={index} board={message} />;
           })}
         </ul>
       </div>

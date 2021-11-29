@@ -7,7 +7,6 @@ import {
   orderBy,
   query,
   serverTimestamp,
-  setDoc,
   updateDoc,
 } from "@firebase/firestore";
 import { ChangeEvent, useEffect, useState, VFC } from "react";
@@ -17,15 +16,16 @@ import { db } from "../../firebase";
 import { ReplyPost } from "./ReplyPost";
 
 type Props = {
-  message: {
+  board: {
     id: string;
     tweet: string;
     name: string;
     uid: string;
   };
 };
+
 export const Post: VFC<Props> = (props) => {
-  const { message } = props;
+  const { board } = props;
 
   const loginUser = useSelector(selectUser);
 
@@ -34,13 +34,13 @@ export const Post: VFC<Props> = (props) => {
   const [edit, setEdit] = useState(false);
   const [like, setLike] = useState<number>(0);
   const [reply, setReply] = useState<string>("");
-  const [changeEdit, setChangeEdit] = useState<string>(message.tweet);
+  const [changeEdit, setChangeEdit] = useState<string>(board.tweet);
   const [messages, setMessages] = useState<Array<any>>([]);
 
-  const match = message.uid === loginUser.uid;
+  const match = board.uid === loginUser.uid;
 
   useEffect(() => {
-    const subCollection = collection(db, "board", message.id, "reply");
+    const subCollection = collection(db, "board", board.id, "reply");
     const q = query(subCollection, orderBy("time", "desc"));
     onSnapshot(q, (querySnapshot) => {
       const arr: Array<any> = [];
@@ -48,6 +48,7 @@ export const Post: VFC<Props> = (props) => {
         arr.push({
           name: doc.data().name,
           tweet: doc.data().tweet,
+          id: doc.id,
         });
       });
       setMessages(arr);
@@ -57,9 +58,7 @@ export const Post: VFC<Props> = (props) => {
   const handleReply = async () => {
     if (reply === "") return;
     const timestamp = serverTimestamp();
-    const newMessages = [...messages, reply];
-    setMessages(newMessages);
-    await addDoc(collection(db, "board", message.id, "reply"), {
+    await addDoc(collection(db, "board", board.id, "reply"), {
       tweet: reply,
       time: timestamp,
       name: loginUser.username,
@@ -68,7 +67,7 @@ export const Post: VFC<Props> = (props) => {
   };
 
   const handleLike = () => {
-    console.log(message.id);
+    console.log(board.id);
     setLike(like + 1);
     if (like === 1) {
       setLike(like - 1);
@@ -76,8 +75,8 @@ export const Post: VFC<Props> = (props) => {
   };
 
   const handleUpdate = async () => {
-    const cityRef = doc(db, "board", message.id);
-    await updateDoc(cityRef, {
+    const boardRef = doc(db, "board", board.id);
+    await updateDoc(boardRef, {
       tweet: changeEdit,
     });
     setEdit(!edit);
@@ -86,7 +85,7 @@ export const Post: VFC<Props> = (props) => {
   const handleDelete = async () => {
     const deleteBtn = window.confirm("削除しても良いですか");
     if (deleteBtn) {
-      await deleteDoc(doc(db, "board", message.id));
+      await deleteDoc(doc(db, "board", board.id));
       setExpand(false);
     }
   };
@@ -94,7 +93,7 @@ export const Post: VFC<Props> = (props) => {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <p style={{ fontWeight: "bold" }}>{message.name}</p>
+        <p style={{ fontWeight: "bold" }}>{board.name}</p>
         <p>{}</p>
         {match && (
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -122,12 +121,12 @@ export const Post: VFC<Props> = (props) => {
           </div>
         )}
       </div>
-      <li>{message.tweet}</li>
+      <li>{board.tweet}</li>
       {both && (
         <div>
           <ul style={{ listStyle: "none" }}>
             {messages.map((message, index) => {
-              return <ReplyPost key={index} message={message} />;
+              return <ReplyPost key={index} message={message} boardId={board.id} />;
             })}
           </ul>
           <div>
