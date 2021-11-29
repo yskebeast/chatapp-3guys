@@ -25,20 +25,20 @@ export const Home: VFC = memo(() => {
   const [tweet, setTweet] = useState("");
 
   useEffect(() => {
-    const board = collection(db, "board");
-    const q = query(board, orderBy("time", "desc"));
-    onSnapshot(q, (querySnapshot) => {
-      const arr: Array<any> = [];
-      querySnapshot.forEach((doc) => {
-        arr.push({
-          id: doc.id,
-          tweet: doc.data().tweet,
-          name: doc.data().name,
-          uid: doc.data().user,
+      const board = collection(db, "board");
+      const q = query(board, orderBy("time", "desc"));
+      onSnapshot(q, (querySnapshot) => {
+        const arr: Array<any> = [];
+        querySnapshot.forEach((doc) => {
+          arr.push({
+            id: doc.id,
+            tweet: doc.data().tweet,
+            name: doc.data().name,
+            uid: doc.data().user,
+          });
         });
+        setMessages(arr);
       });
-      setMessages(arr);
-    });
   }, []);
 
   const handleLogout = () => {
@@ -50,7 +50,7 @@ export const Home: VFC = memo(() => {
   const handleIntro = () => {
     history.push(`/selfintro/${auth.currentUser?.uid}`);
   };
-  
+
   const handleTweet = async () => {
     if (tweet === "") return;
     const timestamp = serverTimestamp();

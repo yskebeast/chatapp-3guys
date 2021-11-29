@@ -84,8 +84,11 @@ export const Post: VFC<Props> = (props) => {
   };
 
   const handleDelete = async () => {
-    window.confirm("削除しても良いですか");
-    await deleteDoc(doc(db, "board", message.id));
+    const deleteBtn = window.confirm("削除しても良いですか");
+    if (deleteBtn) {
+      await deleteDoc(doc(db, "board", message.id));
+      setExpand(false);
+    }
   };
 
   return (
