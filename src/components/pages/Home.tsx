@@ -54,8 +54,6 @@ export const Home: VFC = memo(() => {
   const handleTweet = async () => {
     if (tweet === "") return;
     const timestamp = serverTimestamp();
-    const newMessages = [...messages, tweet];
-    setMessages(newMessages);
     const ref = collection(db, "board");
     await addDoc(ref, {
       tweet: tweet,
