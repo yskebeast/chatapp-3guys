@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "./router/Router";
-import Header from "./components/atoms/organisms/Header";
+import Header from "./components/organisms/Header";
 
 function App() {
   return (
