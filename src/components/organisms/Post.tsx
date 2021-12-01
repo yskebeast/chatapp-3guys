@@ -15,6 +15,12 @@ import { selectUser } from "../../features/userSlice";
 import { db } from "../../firebase";
 import { ReplyPost } from "./ReplyPost";
 
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+
 type Props = {
   board: {
     id: string;
@@ -100,64 +106,73 @@ export const Post: VFC<Props> = (props) => {
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <p style={{ fontWeight: "bold" }}>{board.name}</p>
-        <p>{formatTime}</p>
-        {match && (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <button onClick={() => setExpand(!expand)}> ・・・</button>
-            {expand && (
-              <>
-                <div>
-                  {/* <button onClick={() => setEdit(!edit)}>編集</button> */}
-                  <button onClick={handleDelete}>削除</button>
-                </div>
-                {/* {edit && (
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    <input
+    <Container sx={{ width: "100%" }}>
+      <Box sx={{ display: "flex" }}>
+        <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
+        <Box>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <p style={{ fontWeight: "bold" }}>{board.name}</p>
+            <p>{formatTime}</p>
+            {match && (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Button onClick={() => setExpand(!expand)}> ・・・</Button>
+                {expand && (
+                  <>
+                    <div>
+                      {/* <button onClick={() => setEdit(!edit)}>編集</button> */}
+                      <Button onClick={handleDelete}>削除</Button>
+                    </div>
+                    {/* {edit && (
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                  <input
                       type="text"
                       value={changeEdit}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         setChangeEdit(e.target.value)
                       }
-                    />
-                    <button onClick={handleUpdate}>更新</button>
-                  </div>
-                )} */}
-              </>
+                      />
+                      <button onClick={handleUpdate}>更新</button>
+                      </div>
+                    )} */}
+                  </>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
-      <div style={{marginBottom:"20px"}}>
-        <li>{board.tweet}</li>
-      </div>
-      {both && (
-        <div>
-          <ul style={{ listStyle: "none" }}>
-            {messages.map((message, index) => {
-              return (
-                <ReplyPost key={index} message={message} boardId={board.id} />
-              );
-            })}
-          </ul>
-          <div>
-            <input
-              type="text"
-              value={reply}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setReply(e.target.value)
-              }
-            />
-            <button onClick={handleReply}>送信</button>
+          <div style={{ marginBottom: "20px" }}>
+            <li>{board.tweet}</li>
           </div>
-        </div>
-      )}
-      <button onClick={() => setBoth(!both)}>
-        {both ? <span>閉じる</span> : <span>開く</span>}
-      </button>
-      <button onClick={handleLike}>いいね{like}</button>
-    </div>
+          {both && (
+            <div>
+              <ul style={{ listStyle: "none" }}>
+                {messages.map((message, index) => {
+                  return (
+                    <ReplyPost
+                      key={index}
+                      message={message}
+                      boardId={board.id}
+                    />
+                  );
+                })}
+              </ul>
+              <div>
+                <input
+                  type="text"
+                  value={reply}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setReply(e.target.value)
+                  }
+                />
+                <button onClick={handleReply}>送信</button>
+              </div>
+            </div>
+          )}
+          <button onClick={() => setBoth(!both)}>
+            {both ? <span>閉じる</span> : <span>開く</span>}
+          </button>
+          <button onClick={handleLike}>いいね{like}</button>
+        </Box>
+      </Box>
+    </Container>
   );
 };

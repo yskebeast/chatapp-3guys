@@ -16,14 +16,20 @@ import {
 
 import { Post } from "../organisms/Post";
 import "../../App.css";
+import { MainPost } from "../molecules/MainPost";
+
+import CssBaseline from "@mui/material/CssBaseline";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 export const Home: VFC = memo(() => {
   const history = useHistory();
   const loginUser = useSelector(selectUser);
 
-  const inputRef = useRef<any>(null);
+  // const inputRef = useRef<any>(null);
   const [messages, setMessages] = useState<Array<any>>([]);
-  const [tweet, setTweet] = useState("");
+  // const [tweet, setTweet] = useState("");
 
   useEffect(() => {
     const board = collection(db, "board");
@@ -53,21 +59,22 @@ export const Home: VFC = memo(() => {
     history.push(`/selfintro/${auth.currentUser?.uid}`);
   };
 
-  const handleTweet = async () => {
-    if (tweet === "") return;
-    const timestamp = serverTimestamp();
-    const ref = collection(db, "board");
-    await addDoc(ref, {
-      tweet: tweet,
-      time: timestamp,
-      user: loginUser.uid,
-      name: loginUser.username,
-    });
-    setTweet("");
-  };
+  // const handleTweet = async () => {
+  //   if (tweet === "") return;
+  //   const timestamp = serverTimestamp();
+  //   const ref = collection(db, "board");
+  //   await addDoc(ref, {
+  //     tweet: tweet,
+  //     time: timestamp,
+  //     user: loginUser.uid,
+  //     name: loginUser.username,
+  //   });
+  //   setTweet("");
+  // };
 
   return (
-    <div>
+    <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc", height: "100vh" }}>
+      <CssBaseline />
       <div
         style={{
           display: "flex",
@@ -75,11 +82,16 @@ export const Home: VFC = memo(() => {
           justifyContent: "space-around",
         }}
       >
+        <h3>{loginUser.username}</h3>
         <button onClick={handleIntro}>自己紹介</button>
         <button onClick={handleLogout}>ログアウト</button>
       </div>
-      <h3>{loginUser.username}</h3>
-      <div style={{ width: "400px", margin: "0 auto" }}>
+      <Box sx={{ width: "100%", marginBottom: 1, paddingBottom: 1 }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 1 }}>
+          Home
+        </Typography>
+      </Box>
+      {/* <div style={{ width: "400px", margin: "0 auto" }}>
         <div
           style={{
             marginBottom: "1rem",
@@ -112,14 +124,16 @@ export const Home: VFC = memo(() => {
           />
           <button onClick={handleTweet}>追加</button>
         </div>
-      </div>
-      <div style={{ width: "500px", margin: "0 auto" }}>
-        <ul style={{ listStyle: "none" }}>
+      </div> */}
+      <MainPost />
+      <Box sx={{ width: "100%"}}>
+        <ul style={{ listStyle: "none", paddingLeft:0 }}>
           {messages.map((message, index) => {
             return <Post key={index} board={message} />;
           })}
         </ul>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 });
+
