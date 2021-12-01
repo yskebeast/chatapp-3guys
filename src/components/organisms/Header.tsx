@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 
 
 
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -21,3 +21,5 @@ export const Header: React.FC = () => {
     </Box>
   );
 };
+
+export default Header

@@ -3,7 +3,6 @@ import { useHistory } from "react-router";
 import { auth } from "../../firebase";
 import { signOut } from "@firebase/auth";
 
-
 import { useAuthUserContext } from "../../providers/AuthUserProvider";
 import { collection, getDocs, query } from "@firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,6 +19,10 @@ export const Home: VFC = memo(() => {
     });
   };
 
+  const handleUser = () => {
+    history.push("/userlist");
+  };
+
   const handleIntro = () => {
     history.push(`/selfintro/${auth.currentUser?.uid}`);
   };
@@ -34,6 +37,7 @@ export const Home: VFC = memo(() => {
       <button onClick={handleLogout}>ログアウト</button>
       <div>
         <button onClick={handleIntro}>自己紹介</button>
+        <button onClick={handleUser}>ユーザー</button>
       </div>
     </div>
   );

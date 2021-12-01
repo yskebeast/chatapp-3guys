@@ -5,6 +5,7 @@ import { SignIn } from "../components/pages/SignIn";
 import { SignUp } from "../components/pages/SignUp";
 import { Home } from "../components/pages/Home";
 import { Page404 } from "../components/pages/Page404";
+import { UserList } from "../components/pages/UserList";
 
 export const Router = () => {
   return (
@@ -18,6 +19,9 @@ export const Router = () => {
         </Route>
         <Route path="/home">
           <Home />
+        </Route>
+        <Route path="/userlist">
+          <UserList />
         </Route>
       </AuthUserProvider>
       <Route path="*">

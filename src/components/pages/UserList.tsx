@@ -4,7 +4,7 @@ import ImageList from "@mui/material/ImageList";
 // import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Card from "../molecules/Card";
 
-export default function TitlebarBelowImageList() {
+export const UserList = () => {
   return (
     <ImageList sx={{ mx: "auto", width: 1000 }} cols={3}>
       {itemData.map((item) => {
