@@ -7,6 +7,7 @@ type Props = {
     name: string;
     tweet: string;
     id: string;
+    time: any;
   };
   boardId: string;
 };
@@ -18,6 +19,10 @@ export const ReplyPost: VFC<Props> = (props) => {
   const [expand, setExpand] = useState(false);
   const [edit, setEdit] = useState(false);
   const [changeEdit, setChangeEdit] = useState<string>(message.tweet);
+
+  const formatTime: any = `${message.time.getFullYear()}/${
+    message.time.getMonth() + 1
+  }/${message.time.getDate()} ${message.time.getHours()}:${message.time.getMinutes()}`;
 
   const handleReplyUpdate = async () => {
     const replyRef = doc(db, "board", boardId, "reply", message.id);
@@ -33,7 +38,7 @@ export const ReplyPost: VFC<Props> = (props) => {
       await deleteDoc(doc(db, "board", boardId, "reply", message.id));
       setExpand(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -47,6 +52,7 @@ export const ReplyPost: VFC<Props> = (props) => {
         <p style={{ fontWeight: "bold", color: "skyblue", margin: 0 }}>
           {message.name}
         </p>
+        <p>{formatTime}</p>
         <div
           style={{
             display: "flex",

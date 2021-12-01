@@ -21,6 +21,7 @@ type Props = {
     tweet: string;
     name: string;
     uid: string;
+    time: any;
   };
 };
 
@@ -39,6 +40,10 @@ export const Post: VFC<Props> = (props) => {
 
   const match = board.uid === loginUser.uid;
 
+  const formatTime: any = `${board.time.getFullYear()}/${
+    board.time.getMonth() + 1
+  }/${board.time.getDate()} ${board.time.getHours()}:${board.time.getMinutes()}`;
+
   useEffect(() => {
     const subCollection = collection(db, "board", board.id, "reply");
     const q = query(subCollection, orderBy("time", "desc"));
@@ -49,6 +54,7 @@ export const Post: VFC<Props> = (props) => {
           name: doc.data().name,
           tweet: doc.data().tweet,
           id: doc.id,
+          time: doc.data({ serverTimestamps: "estimate" }).time.toDate(),
         });
       });
       setMessages(arr);
@@ -66,21 +72,24 @@ export const Post: VFC<Props> = (props) => {
     setReply("");
   };
 
-  const handleLike = () => {
-    console.log(board.id);
-    setLike(like + 1);
-    if (like === 1) {
-      setLike(like - 1);
-    }
+  const handleLike = async () => {
+    // setLike(like + 1);
+    // if (like === 1) {
+    //   setLike(like - 1);
+    // }
+    // const likeBtn = doc(db, "board", board.id);
+    // await updateDoc(likeBtn, {
+    //   like: like
+    // });
   };
 
-  const handleUpdate = async () => {
-    const boardRef = doc(db, "board", board.id);
-    await updateDoc(boardRef, {
-      tweet: changeEdit,
-    });
-    setEdit(!edit);
-  };
+  // const handleUpdate = async () => {
+  //   const boardRef = doc(db, "board", board.id);
+  //   await updateDoc(boardRef, {
+  //     tweet: changeEdit,
+  //   });
+  //   setEdit(!edit);
+  // };
 
   const handleDelete = async () => {
     const deleteBtn = window.confirm("削除しても良いですか");
@@ -94,17 +103,17 @@ export const Post: VFC<Props> = (props) => {
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <p style={{ fontWeight: "bold" }}>{board.name}</p>
-        <p>{}</p>
+        <p>{formatTime}</p>
         {match && (
           <div style={{ display: "flex", alignItems: "center" }}>
             <button onClick={() => setExpand(!expand)}> ・・・</button>
             {expand && (
               <>
                 <div>
-                  <button onClick={() => setEdit(!edit)}>編集</button>
+                  {/* <button onClick={() => setEdit(!edit)}>編集</button> */}
                   <button onClick={handleDelete}>削除</button>
                 </div>
-                {edit && (
+                {/* {edit && (
                   <div style={{ display: "flex", flexDirection: "column" }}>
                     <input
                       type="text"
@@ -115,18 +124,22 @@ export const Post: VFC<Props> = (props) => {
                     />
                     <button onClick={handleUpdate}>更新</button>
                   </div>
-                )}
+                )} */}
               </>
             )}
           </div>
         )}
       </div>
-      <li>{board.tweet}</li>
+      <div style={{marginBottom:"20px"}}>
+        <li>{board.tweet}</li>
+      </div>
       {both && (
         <div>
           <ul style={{ listStyle: "none" }}>
             {messages.map((message, index) => {
-              return <ReplyPost key={index} message={message} boardId={board.id} />;
+              return (
+                <ReplyPost key={index} message={message} boardId={board.id} />
+              );
             })}
           </ul>
           <div>

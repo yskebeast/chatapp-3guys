@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useEffect, useState, VFC } from "react";
+import { ChangeEvent, memo, useEffect, useRef, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { auth, db } from "../../firebase";
 import { signOut } from "@firebase/auth";
@@ -21,6 +21,7 @@ export const Home: VFC = memo(() => {
   const history = useHistory();
   const loginUser = useSelector(selectUser);
 
+  const inputRef = useRef<any>(null);
   const [messages, setMessages] = useState<Array<any>>([]);
   const [tweet, setTweet] = useState("");
 
@@ -35,6 +36,7 @@ export const Home: VFC = memo(() => {
           tweet: doc.data().tweet,
           name: doc.data().name,
           uid: doc.data().user,
+          time: doc.data({ serverTimestamps: "estimate" }).time.toDate(),
         });
       });
       setMessages(arr);
@@ -94,9 +96,20 @@ export const Home: VFC = memo(() => {
               setTweet(e.target.value)
             }
           />
+          <div>
+          </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <button>画像</button>
+          <button onClick={() => inputRef.current.click()}>画像</button>
+          <input
+            hidden
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              console.log(e.target.files);
+            }}
+          />
           <button onClick={handleTweet}>追加</button>
         </div>
       </div>
