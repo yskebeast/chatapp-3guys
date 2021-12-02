@@ -3,12 +3,14 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import Avatar from "../atoms/avatar/Avatar";
+
 import "./Card.css";
 
 type PropsType = {
   img: string;
   name: string;
 };
+
 
 export default function ActionAreaCard(props: PropsType) {
   const { img, name } = props;
@@ -19,6 +21,7 @@ export default function ActionAreaCard(props: PropsType) {
       <Avatar />
       <CardActionArea>
         <CardContent>
+
           <Typography
             className="Card__card__font"
             gutterBottom
@@ -34,6 +37,7 @@ export default function ActionAreaCard(props: PropsType) {
           >
             {img}
           </Typography>
+
         </CardContent>
       </CardActionArea>
     </Card>

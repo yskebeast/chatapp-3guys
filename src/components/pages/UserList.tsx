@@ -1,6 +1,8 @@
 import * as React from "react";
+import { useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import Card from "../molecules/Card";
+
 import { useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import Header from "../organisms/Header";
@@ -12,9 +14,11 @@ type itemType = {
   name: string;
 };
 
+
 export const UserList = () => {
   const itemData: itemType[] = [];
   const [data, setData] = useState<itemType[]>();
+
 
   React.useEffect(() => {
     const yobidasi = async () => {
@@ -58,3 +62,4 @@ export const UserList = () => {
     </div>
   );
 };
+
