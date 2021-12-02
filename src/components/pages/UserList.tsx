@@ -2,8 +2,6 @@ import * as React from "react";
 import { useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import Card from "../molecules/Card";
-
-import { useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import Header from "../organisms/Header";
 import { db } from "../../firebase";
