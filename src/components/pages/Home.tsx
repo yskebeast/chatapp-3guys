@@ -3,9 +3,13 @@ import { useHistory } from "react-router";
 import { auth, db } from "../../firebase";
 import { signOut } from "@firebase/auth";
 
-import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
-import { collection, onSnapshot, query } from "firebase/firestore";
+
+import { useAuthUserContext } from "../../providers/AuthUserProvider";
+import { collection, getDocs, query } from "@firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, login, logout } from "../../features/userSlice";
+import Header from "../organisms/Header";
+
 
 export const Home: VFC = memo(() => {
   const get = () => {
@@ -36,6 +40,10 @@ export const Home: VFC = memo(() => {
     });
   };
 
+  const handleUser = () => {
+    history.push("/userlist");
+  };
+
   const handleIntro = () => {
     history.push(`/selfintro/${auth.currentUser?.uid}`);
   };
@@ -51,6 +59,7 @@ export const Home: VFC = memo(() => {
       <button onClick={handleLogout}>ログアウト</button>
       <div>
         <button onClick={handleIntro}>自己紹介</button>
+        <button onClick={handleUser}>ユーザー</button>
       </div>
     </div>
   );

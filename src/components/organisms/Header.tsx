@@ -5,11 +5,13 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import { Link, useHistory } from "react-router-dom";
 
+
 const Header: VFC = () => {
   const history = useHistory();
   const buttonUser = () => {
     history.push("./userlist");
   };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -26,4 +28,6 @@ const Header: VFC = () => {
     </Box>
   );
 };
-export default Header;
+
+export default Header
+
