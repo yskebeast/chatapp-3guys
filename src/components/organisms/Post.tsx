@@ -3,13 +3,14 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
   updateDoc,
 } from "@firebase/firestore";
-import { ChangeEvent, useEffect, useState, VFC } from "react";
+import React, { ChangeEvent, useEffect, useState, VFC } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { db } from "../../firebase";
@@ -20,6 +21,12 @@ import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import "../../App.css";
+import ListItemText from '@mui/material/ListItemText';
+import List from '@mui/material/List';
+
 
 type Props = {
   board: {
@@ -31,6 +38,18 @@ type Props = {
   };
 };
 
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "50%",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 export const Post: VFC<Props> = (props) => {
   const { board } = props;
 
@@ -38,11 +57,13 @@ export const Post: VFC<Props> = (props) => {
 
   const [both, setBoth] = useState(false);
   const [expand, setExpand] = useState(false);
-  const [edit, setEdit] = useState(false);
   const [like, setLike] = useState<number>(0);
   const [reply, setReply] = useState<string>("");
-  const [changeEdit, setChangeEdit] = useState<string>(board.tweet);
   const [messages, setMessages] = useState<Array<any>>([]);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const match = board.uid === loginUser.uid;
 
@@ -76,6 +97,8 @@ export const Post: VFC<Props> = (props) => {
       name: loginUser.username,
     });
     setReply("");
+    setOpen(false);
+    setBoth(true);
   };
 
   const handleLike = async () => {
@@ -89,14 +112,6 @@ export const Post: VFC<Props> = (props) => {
     // });
   };
 
-  // const handleUpdate = async () => {
-  //   const boardRef = doc(db, "board", board.id);
-  //   await updateDoc(boardRef, {
-  //     tweet: changeEdit,
-  //   });
-  //   setEdit(!edit);
-  // };
-
   const handleDelete = async () => {
     const deleteBtn = window.confirm("削除しても良いですか");
     if (deleteBtn) {
@@ -107,44 +122,41 @@ export const Post: VFC<Props> = (props) => {
 
   return (
     <Container sx={{ width: "100%" }}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", borderTop: 1, paddingY: 3 }}>
         <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
-        <Box>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <p style={{ fontWeight: "bold" }}>{board.name}</p>
-            <p>{formatTime}</p>
+        <Box sx={{ width: "100%" }}>
+          <Box
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ display: "flex" }}>
+              <p
+                className="red"
+                style={{ fontWeight: "bold", marginRight: "1rem" }}
+              >
+                {board.name}
+              </p>
+              <p>{formatTime}</p>
+            </Box>
             {match && (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Button onClick={() => setExpand(!expand)}> ・・・</Button>
-                {expand && (
-                  <>
-                    <div>
-                      {/* <button onClick={() => setEdit(!edit)}>編集</button> */}
-                      <Button onClick={handleDelete}>削除</Button>
-                    </div>
-                    {/* {edit && (
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                  <input
-                      type="text"
-                      value={changeEdit}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setChangeEdit(e.target.value)
-                      }
-                      />
-                      <button onClick={handleUpdate}>更新</button>
-                      </div>
-                    )} */}
-                  </>
-                )}
-              </div>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Button onClick={() => setExpand(!expand)}>
+                  {expand && <Button onClick={handleDelete}>削除</Button>}
+                  ・・・
+                </Button>
+              </Box>
             )}
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-            <li>{board.tweet}</li>
-          </div>
+          </Box>
+          <Box style={{ marginBottom: "20px" }}>
+            <ListItemText>{board.tweet}</ListItemText>
+          </Box>
           {both && (
-            <div>
-              <ul style={{ listStyle: "none" }}>
+            <Box>
+              <List style={{ listStyle: "none", paddingLeft: "0" }}>
                 {messages.map((message, index) => {
                   return (
                     <ReplyPost
@@ -154,23 +166,98 @@ export const Post: VFC<Props> = (props) => {
                     />
                   );
                 })}
-              </ul>
-              <div>
-                <input
-                  type="text"
-                  value={reply}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setReply(e.target.value)
-                  }
-                />
-                <button onClick={handleReply}>送信</button>
-              </div>
-            </div>
+              </List>
+            </Box>
           )}
-          <button onClick={() => setBoth(!both)}>
-            {both ? <span>閉じる</span> : <span>開く</span>}
-          </button>
-          <button onClick={handleLike}>いいね{like}</button>
+          <Box sx={{ marginTop: 2 }}>
+            <Button onClick={handleOpen}>返信</Button>
+            <Button
+              onClick={() => setBoth(!both)}
+              disabled={ReplyPost.length === 0}
+            >
+              {both ? <span>閉じる</span> : <span>開く</span>}
+            </Button>
+          </Box>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Box
+                sx={{
+                  display: "flex",
+                  backgroundColor: "#e1e1e1",
+                  marginTop: 3,
+                  padding: 3,
+                }}
+              >
+                <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                  }}
+                >
+                  <p style={{ fontWeight: "bold", marginRight: "1rem" }}>
+                    {board.name}
+                  </p>
+                  <Box style={{ marginBottom: "20px" }}>
+                    <ListItemText style={{ listStyle: "none" }}>{board.tweet}</ListItemText>
+                  </Box>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  marginTop: 3,
+                  padding: 3,
+                  backgroundColor: "#e1e1e1",
+                }}
+              >
+                <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <TextField
+                      autoFocus
+                      type="text"
+                      id="standard-multiline-flexible"
+                      multiline
+                      value={reply}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setReply(e.target.value)
+                      }
+                    />
+                    <Button
+                      sx={{
+                        display: "flex",
+                        width: "10%",
+                        marginLeft: "auto",
+                        marginTop: 2,
+                      }}
+                      onClick={handleReply}
+                    >
+                      送信
+                    </Button>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Modal>
+          {/* <button onClick={handleLike}>いいね{like}</button> */}
         </Box>
       </Box>
     </Container>
