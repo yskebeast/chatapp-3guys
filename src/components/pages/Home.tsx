@@ -1,4 +1,4 @@
-import {  memo, useEffect, useRef, useState, VFC } from "react";
+import { memo, useEffect, useRef, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { auth, db } from "../../firebase";
 import { signOut } from "@firebase/auth";
@@ -21,8 +21,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import List from '@mui/material/List';
-
+import List from "@mui/material/List";
 
 type Arrprops = {
   id: string;
@@ -67,7 +66,7 @@ export const Home: VFC = memo(() => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc", height: "100%" }}>
+    <Container maxWidth="md" sx={{ bgcolor: "#f8f8ff", height: "100%" }}>
       <CssBaseline />
       <Box
         style={{

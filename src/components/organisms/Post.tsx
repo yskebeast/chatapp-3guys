@@ -188,7 +188,7 @@ export const Post: VFC<Props> = (props) => {
               <Box
                 sx={{
                   display: "flex",
-                  backgroundColor: "#e1e1e1",
+                  backgroundColor: "#f8f8ff",
                   marginTop: 3,
                   padding: 3,
                 }}
@@ -214,7 +214,7 @@ export const Post: VFC<Props> = (props) => {
                   display: "flex",
                   marginTop: 3,
                   padding: 3,
-                  backgroundColor: "#e1e1e1",
+                  backgroundColor: "#f8f8ff",
                 }}
               >
                 <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
