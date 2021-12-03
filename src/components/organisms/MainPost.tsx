@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useBoard } from "../../hooks/useBoard";
 
 import Container from "@mui/material/Container";
@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import PhotoIcon from "@mui/icons-material/Photo";
 
 export const MainPost = () => {
-  const { tweet, setTweet, handleTweet} = useBoard();
+  const { tweet, setTweet, handleTweet, valid } = useBoard();
 
   const inputRef = useRef<any>(null);
 
@@ -63,6 +63,7 @@ export const MainPost = () => {
                 }}
               /> */}
               <PhotoIcon sx={{ fontSize: 30 }} />
+
               <Button
                 sx={{ borderRadius: 16, paddingX: 3 }}
                 variant="contained"
@@ -70,6 +71,7 @@ export const MainPost = () => {
               >
                 投稿
               </Button>
+              
             </Box>
           </Box>
         </Box>

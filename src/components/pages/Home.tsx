@@ -15,21 +15,14 @@ import {
 
 import { Post } from "../organisms/Post";
 import "../../App.css";
-import { MainPost } from "../molecules/MainPost";
+import { MainPost } from "../organisms/MainPost";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
-
-type Arrprops = {
-  id: string;
-  tweet: string;
-  name: string;
-  uid: string;
-  time: any;
-};
+import { ArrProps } from "../../types/type";
 
 export const Home: VFC = memo(() => {
   const history = useHistory();
@@ -41,7 +34,7 @@ export const Home: VFC = memo(() => {
     const board = collection(db, "board");
     const q = query(board, orderBy("time", "desc"));
     onSnapshot(q, (querySnapshot) => {
-      const arr: Array<Arrprops> = [];
+      const arr: Array<ArrProps> = [];
       querySnapshot.forEach((doc) => {
         arr.push({
           id: doc.id,
@@ -61,30 +54,29 @@ export const Home: VFC = memo(() => {
     });
   };
 
-  const handleIntro = () => {
-    history.push(`/selfintro/${auth.currentUser?.uid}`);
-  };
-
   return (
     <Container maxWidth="md" sx={{ bgcolor: "#f8f8ff", height: "100%" }}>
       <CssBaseline />
       <Box
-        style={{
+        sx={{
+          width: "100%",
+          paddingY: 3,
           display: "flex",
-          alignItems: "center",
           justifyContent: "space-around",
         }}
       >
-        <h3>{loginUser.username}</h3>
-        <button onClick={handleIntro}>自己紹介</button>
-        <button onClick={handleLogout}>ログアウト</button>
-      </Box>
-      <Box sx={{ width: "100%", marginBottom: 1, paddingBottom: 1 }}>
         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 1 }}>
           Home
         </Typography>
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 1 }}>
+          {loginUser.username}
+          <span style={{ marginLeft: ".5rem" }}>さん</span>
+        </Typography>
+        <button onClick={handleLogout}>ログアウト</button>
       </Box>
+
       <MainPost />
+
       <Box sx={{ width: "100%" }}>
         <List style={{ listStyle: "none", paddingLeft: 0 }}>
           {messages.map((message, index) => {

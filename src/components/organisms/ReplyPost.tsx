@@ -1,42 +1,17 @@
 import { deleteDoc, doc, updateDoc } from "@firebase/firestore";
-import React, { ChangeEvent, useEffect, useState, VFC } from "react";
+import React, { useState, VFC } from "react";
 import { db } from "../../firebase";
 
-import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import ListItemText from '@mui/material/ListItemText';
+import ListItemText from "@mui/material/ListItemText";
+import { ReplyPostModal } from "./ReplyPostModal";
+import { ReplyPostProps } from "../../types/type";
 
-type Props = {
-  message: {
-    name: string;
-    tweet: string;
-    id: string;
-    time: any;
-  };
-  boardId: string;
-};
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-export const ReplyPost: VFC<Props> = (props) => {
+export const ReplyPost: VFC<ReplyPostProps> = (props) => {
   const { message, boardId } = props;
 
-  const [count, setCount] = useState(0);
   const [expand, setExpand] = useState(false);
   const [edit, setEdit] = useState(false);
   const [changeEdit, setChangeEdit] = useState<string>(message.tweet);
@@ -65,6 +40,7 @@ export const ReplyPost: VFC<Props> = (props) => {
     if (deleteBtn) {
       await deleteDoc(doc(db, "board", boardId, "reply", message.id));
       setExpand(false);
+      setOpen(false);
     }
   };
 
@@ -75,9 +51,12 @@ export const ReplyPost: VFC<Props> = (props) => {
           display: "flex",
           borderTop: 1,
           paddingY: 3,
+          bgcolor: "#fff",
         }}
       >
-        <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
+        <Box sx={{ paddingLeft: 2 }}>
+          <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
+        </Box>
         <Box style={{ width: "100%" }}>
           <Box
             style={{
@@ -99,37 +78,16 @@ export const ReplyPost: VFC<Props> = (props) => {
           <ListItemText>{message.tweet}</ListItemText>
         </Box>
       </Box>
-      <Modal
+      <ReplyPostModal
         open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Button onClick={() => setEdit(!edit)}>編集</Button>
-            {edit && (
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <TextField
-                  type="text"
-                  value={changeEdit}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setChangeEdit(e.target.value)
-                  }
-                />
-                <Button onClick={handleReplyUpdate}>更新</Button>
-              </Box>
-            )}
-          </Box>
-          <Button
-            sx={{ marginLeft: "auto", display: "block" }}
-            onClick={handleReplyDelete}
-          >
-            削除
-          </Button>
-        </Box>
-      </Modal>
-      {/* <button onClick={() => setCount(count + 1)}>{count}</button> */}
+        setOpen={setOpen}
+        edit={edit}
+        setEdit={setEdit}
+        changeEdit={changeEdit}
+        setChangeEdit={setChangeEdit}
+        handleReplyUpdate={handleReplyUpdate}
+        handleReplyDelete={handleReplyDelete}
+      />
     </Box>
   );
 };

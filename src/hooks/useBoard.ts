@@ -8,6 +8,7 @@ export const useBoard = () => {
   const loginUser = useSelector(selectUser);
 
   const [tweet, setTweet] = useState("");
+  const [valid, setValid] = useState(false)
 
   const handleTweet = async () => {
     if (tweet === "") return;
@@ -20,6 +21,8 @@ export const useBoard = () => {
       name: loginUser.username,
     });
     setTweet("");
+    // window.location.reload();
+    setValid(true)
   };
-  return {handleTweet, tweet, setTweet}
+  return {handleTweet, tweet, setTweet, valid,setValid}
 };
