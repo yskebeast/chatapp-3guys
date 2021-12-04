@@ -11,7 +11,6 @@ type PropsType = {
   name: string;
 };
 
-
 export default function ActionAreaCard(props: PropsType) {
   const { img, name } = props;
   console.log(img);
@@ -21,7 +20,6 @@ export default function ActionAreaCard(props: PropsType) {
       <Avatar />
       <CardActionArea>
         <CardContent>
-
           <Typography
             className="Card__card__font"
             gutterBottom
@@ -37,7 +35,6 @@ export default function ActionAreaCard(props: PropsType) {
           >
             {img}
           </Typography>
-
         </CardContent>
       </CardActionArea>
     </Card>

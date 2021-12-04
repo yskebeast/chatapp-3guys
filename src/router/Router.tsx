@@ -6,6 +6,7 @@ import { SignUp } from "../components/pages/SignUp";
 import { Home } from "../components/pages/Home";
 import { Page404 } from "../components/pages/Page404";
 import { UserList } from "../components/pages/UserList";
+import { Board } from "../components/pages/Board";
 
 export const Router = () => {
   return (
@@ -22,6 +23,9 @@ export const Router = () => {
         </Route>
         <Route path="/userlist">
           <UserList />
+        </Route>
+        <Route path="/board">
+          <Board />
         </Route>
       </AuthUserProvider>
       <Route path="*">

@@ -35,6 +35,10 @@ export const Home: VFC = memo(() => {
     history.push(`/selfintro/${auth.currentUser?.uid}`);
   };
 
+  const handleBoard = () => {
+    history.push('/board')
+  }
+
   return (
     <div>
       <button onClick={buttonUser}>userlinkへのボタン</button>
@@ -46,6 +50,7 @@ export const Home: VFC = memo(() => {
       <div>
         <button onClick={handleIntro}>自己紹介</button>
         <button onClick={handleUser}>ユーザー</button>
+        <button onClick={handleBoard}>掲示板</button>
       </div>
     </div>
   );

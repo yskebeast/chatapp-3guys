@@ -5,7 +5,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import { Link, useHistory } from "react-router-dom";
 
-
 const Header: VFC = () => {
   const history = useHistory();
   const buttonUser = () => {
@@ -29,5 +28,4 @@ const Header: VFC = () => {
   );
 };
 
-export default Header
-
+export default Header;
