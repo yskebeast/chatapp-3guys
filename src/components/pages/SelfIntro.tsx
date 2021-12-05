@@ -5,16 +5,31 @@ import Modal from "@mui/material/Modal";
 import React, { ChangeEvent, memo, VFC } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
-import { changeBirth, changeName, changeSelfIntro, selectUser } from "../../features/userSlice";
+import {
+  changeBirth,
+  changeName,
+  changeSelfIntro,
+  selectUser,
+} from "../../features/userSlice";
 import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export const SelfIntro: VFC = memo(() => {
   const loginUser = useSelector(selectUser);
+  const UserId = useSelector(selectUser).uid;
   const dispach = useAppDispatch();
+  
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  // const userRef = db.collection("users").doc("4eADonIyVHL8bdISoN5T");
+  const userRef = doc(db, "users", UserId);
+  await updateDoc(UserRef, {
+    name: "オバはるき",
+  });
 
   return (
     <Box sx={{ width: "60%", marginX: "auto", textAlign: "center" }}>
