@@ -12,24 +12,31 @@ import {
   selectUser,
 } from "../../features/userSlice";
 import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export const SelfIntro: VFC = memo(() => {
   const loginUser = useSelector(selectUser);
+  const UserName = useSelector(selectUser).username;
   const UserId = useSelector(selectUser).uid;
+  console.log("loginuserだよ  " + loginUser);
+  console.log("userNameだよ  " + UserName);
+
   const dispach = useAppDispatch();
-  
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  // console.log(doc(db, "users", UserId));
 
   // const userRef = db.collection("users").doc("4eADonIyVHL8bdISoN5T");
-  const userRef = doc(db, "users", UserId);
-  await updateDoc(UserRef, {
-    name: "オバはるき",
-  });
+  // const UserRef = doc(db, "users", UserId);
+
+  // const EditName = async () => {
+  //   await setDoc(UserRef, {
+  //     name: "オバはるき", ここにテキストを代入
+  //   });
+  // };
 
   return (
     <Box sx={{ width: "60%", marginX: "auto", textAlign: "center" }}>
