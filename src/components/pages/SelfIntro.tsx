@@ -2,7 +2,7 @@ import { Avatar, Button, TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/system";
 import Modal from "@mui/material/Modal";
-import React, { ChangeEvent, memo, VFC } from "react";
+import React, { ChangeEvent, memo, useState, VFC } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../app/hooks";
 import {
@@ -34,7 +34,7 @@ export const SelfIntro: VFC = memo(() => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  // const [Userid, setUserid] = useState(0);
+  const [Userid, setUserid] = useState(0);
 
   // console.log(doc(db, "users", useSelector(selectUser).uid));
   // console.log(doc(db, "users", UserId));
@@ -42,8 +42,8 @@ export const SelfIntro: VFC = memo(() => {
   const change = async () => {
     const ref = doc(db, "users", UserId);
     await updateDoc(ref, {
-      name: ,
-      // 変数名に
+      name: "響き",
+      // 変数名
     });
   };
 
@@ -162,8 +162,11 @@ export const SelfIntro: VFC = memo(() => {
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
               value={loginUser.birth}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                dispach(changeBirth(e.target.value))
+              onChange={
+                (e: ChangeEvent<HTMLInputElement>) =>
+                  console.log(e.target.value)
+                // dispach(changeBirth(e.target.value))
+                // console.log(e.targe.value)
               }
             />
           </Box>
