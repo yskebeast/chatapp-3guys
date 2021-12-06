@@ -12,7 +12,13 @@ import {
   selectUser,
 } from "../../features/userSlice";
 import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
-import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 
 export const SelfIntro: VFC = memo(() => {
@@ -21,13 +27,25 @@ export const SelfIntro: VFC = memo(() => {
   const UserId = useSelector(selectUser).uid;
   console.log("loginuserだよ  " + loginUser);
   console.log("userNameだよ  " + UserName);
+  console.log(UserId);
 
   const dispach = useAppDispatch();
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  // const [Userid, setUserid] = useState(0);
+
+  // console.log(doc(db, "users", useSelector(selectUser).uid));
   // console.log(doc(db, "users", UserId));
+
+  const change = async () => {
+    const ref = doc(db, "users", UserId);
+    await updateDoc(ref, {
+      name: ,
+      // 変数名に
+    });
+  };
 
   // const userRef = db.collection("users").doc("4eADonIyVHL8bdISoN5T");
   // const UserRef = doc(db, "users", UserId);
@@ -40,6 +58,7 @@ export const SelfIntro: VFC = memo(() => {
 
   return (
     <Box sx={{ width: "60%", marginX: "auto", textAlign: "center" }}>
+      <button onClick={change}>cccc</button>
       <Typography
         component="h1"
         sx={{ fontSize: "30px", my: 3, fontWeight: "bold" }}
