@@ -6,23 +6,33 @@ import { collection, getDocs } from "firebase/firestore";
 import Header from "../organisms/Header";
 import { db } from "../../firebase";
 import "./UserList.css";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
 type itemType = {
   img: string;
   name: string;
 };
 
-
 export const UserList = () => {
   const itemData: itemType[] = [];
   const [data, setData] = useState<itemType[]>();
-
+  const loginUser = useSelector(selectUser);
+  
+  const [loadingUser, setLoadingUser] = useState(true);
+  
+  console.log(loginUser.uid);
 
   React.useEffect(() => {
     const yobidasi = async () => {
       const querySnapshot = await getDocs(collection(db, "users"));
       querySnapshot.forEach((doc) => {
-        itemData.push({ img: doc.data().selfIntro, name: doc.data().name });
+        if (doc.data().name == loginUser.uid) {
+          console.log("大場春希");
+        } else {
+          console.log("a");
+          itemData.push({ img: doc.data().selfIntro, name: doc.data().name });
+        }
       });
       setData(itemData);
     };
@@ -60,4 +70,3 @@ export const UserList = () => {
     </div>
   );
 };
-

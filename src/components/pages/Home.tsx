@@ -3,17 +3,13 @@ import { useHistory } from "react-router";
 import { auth, db } from "../../firebase";
 import { signOut } from "@firebase/auth";
 
-
 import { useAuthUserContext } from "../../providers/AuthUserProvider";
 import { collection, getDocs, query } from "@firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, login, logout } from "../../features/userSlice";
 import Header from "../organisms/Header";
 
-
 export const Home: VFC = memo(() => {
-  
-
   const buttonUser = () => {
     history.push("./userlist");
   };
