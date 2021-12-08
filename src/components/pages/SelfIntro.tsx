@@ -35,6 +35,9 @@ export const SelfIntro: VFC = memo(() => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [Userid, setUserid] = useState(0);
+  let CatchName: string;
+  let CatchSelfIntro: string;
+  let CatchBirth: string;
 
   // console.log(doc(db, "users", useSelector(selectUser).uid));
   // console.log(doc(db, "users", UserId));
@@ -42,9 +45,12 @@ export const SelfIntro: VFC = memo(() => {
   const change = async () => {
     const ref = doc(db, "users", UserId);
     await updateDoc(ref, {
-      name: "響き",
-      // 変数名
+      name: CatchName,
+      selfIntro: CatchSelfIntro,
+      birth: CatchBirth,
     });
+    setOpen(false);
+    console.log("変更したよ");
   };
 
   // const userRef = db.collection("users").doc("4eADonIyVHL8bdISoN5T");
@@ -136,9 +142,11 @@ export const SelfIntro: VFC = memo(() => {
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
               value={loginUser.username}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                dispach(changeName(e.target.value))
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                // CatchName = e.target.value;
+                // console.log(CatchName);
+                dispach(changeName(e.target.value));
+              }}
             />
           </Box>
           <Box>
@@ -149,8 +157,12 @@ export const SelfIntro: VFC = memo(() => {
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
               value={loginUser.selfIntro}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                dispach(changeSelfIntro(e.target.value))
+              onChange={
+                (e: ChangeEvent<HTMLInputElement>) => {
+                  dispach(changeSelfIntro(e.target.value));
+                  // CatchSelfIntro = e.target.value;
+                }
+                // dispach(changeSelfIntro(e.target.value))
               }
             />
           </Box>
@@ -163,8 +175,11 @@ export const SelfIntro: VFC = memo(() => {
               type="text"
               value={loginUser.birth}
               onChange={
-                (e: ChangeEvent<HTMLInputElement>) =>
-                  console.log(e.target.value)
+                (e: ChangeEvent<HTMLInputElement>) => {
+                  dispach(changeBirth(e.target.value));
+                  // CatchBirth = e.target.value;
+                }
+                // console.log(e.target.value)
                 // dispach(changeBirth(e.target.value))
                 // console.log(e.targe.value)
               }
@@ -172,7 +187,7 @@ export const SelfIntro: VFC = memo(() => {
           </Box>
           <Button
             sx={{ display: "block", marginLeft: "auto" }}
-            onClick={handleClose}
+            onClick={change}
           >
             保存
           </Button>

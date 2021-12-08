@@ -50,7 +50,7 @@ export const AuthUserProvider = (props: { children: ReactNode }) => {
       if (user) {
         getDocument(user)
 
-        // history.push(`/home/${auth.currentUser?.uid}`);
+        // history.push(`/home/${auth.currentUser?.uid}`);f
       } else {
         dispatch(logout())
         history.push("/");
