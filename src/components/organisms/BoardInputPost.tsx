@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { db } from "../../firebase";
+import { db, storage } from "../../firebase";
 import { addDoc, collection, serverTimestamp } from "@firebase/firestore";
 import { useSelector } from "react-redux";
 
@@ -10,8 +10,7 @@ import { TextField } from "@mui/material";
 
 import { selectUser } from "../../features/userSlice";
 import { InputPostType } from "../../types/type";
-
-
+import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 
 export const BoardInputPost = (props: InputPostType) => {
   const { setLoad } = props;
@@ -34,6 +33,34 @@ export const BoardInputPost = (props: InputPostType) => {
     setLoad(!false);
   };
 
+  const [progress, setProgress] = useState(0);
+
+  const handleImage = (e: any) => {
+    e.preventDefault();
+    const file = e.target[0].files[0];
+    uploadFile(file)
+  };
+
+  const uploadFile = (file: any) => {
+    if (!file) return;
+    const storageRef = ref(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.fround(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(prog);
+      },
+      (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
+      }
+    );
+  };
+
   return (
     <Box sx={{ display: "flex", paddingY: 3, borderTop: 1, borderBottom: 1 }}>
       <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
@@ -43,12 +70,18 @@ export const BoardInputPost = (props: InputPostType) => {
           id="standard-multiline-flexible"
           multiline
           sx={{ width: "100%" }}
+          inputProps={{ maxLength: 130 }}
           placeholder="調子はどう？"
           value={post}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setPost(e.target.value)
           }
         />
+        {/* <form onSubmit={handleImage}>
+          <input type="file" />
+          <button type="submit">upload</button>
+        </form>
+        <h3>uploaded{progress} % </h3> */}
         <Box
           sx={{
             display: "flex",
@@ -59,6 +92,7 @@ export const BoardInputPost = (props: InputPostType) => {
           }}
         >
           <Button>画像</Button>
+          <p>{`${post.length} / 130`}</p>
           <Button onClick={handlePost} disabled={post.length === 0}>
             投稿
           </Button>

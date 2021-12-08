@@ -36,7 +36,7 @@ export const BoardHeader = () => {
         {loginUser.username}
         <span>さん</span>
       </p>
-      <button onClick={handleLogout}>ログアウト</button>
+      <Button onClick={handleLogout}>ログアウト</Button>
     </Box>
   );
 };

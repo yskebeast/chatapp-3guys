@@ -17,6 +17,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
+import Modal from "@mui/material/Modal";
 
 import { BoardHeader } from "../organisms/BoardHeader";
 import { BoardInputPost } from "../organisms/BoardInputPost";
@@ -26,7 +27,6 @@ import { Arrtype } from "../../types/type";
 import { BoardNonPost } from "../organisms/BoardNonPost";
 
 export const Board = () => {
-
   const [posts, setPosts] = useState<Array<Arrtype>>([]);
   const [load, setLoad] = useState(false);
   const [view, setView] = useState(false);
@@ -35,7 +35,8 @@ export const Board = () => {
     setView(true);
     let arr: Arrtype[] = [];
     const getPost = async () => {
-      const querySnapshot = await getDocs(collection(db, "board"));
+      const q = query(collection(db, "board"), orderBy("time", "desc"));
+      const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         arr.push({
           id: doc.id,
@@ -52,22 +53,8 @@ export const Board = () => {
   }, [load]);
 
   // useEffect(() => {
-  //   const board = collection(db, "board");
-  //   const q = query(board, orderBy("time", "desc"));
-  //   onSnapshot(q, (querySnapshot) => {
-  //     let arr: Arrtype[] = [];
-  //     querySnapshot.forEach((doc) => {
-  //       arr.push({
-  //         id: doc.id,
-  //         name: doc.data().name,
-  //         post: doc.data().post,
-  //         time: doc.data({ serverTimestamps: "estimate" }).time.toDate(),
-  //       });
-  //     });
-  //     setPosts(arr);
-  //     setView(false);
-  //   });
-  // }, []);
+  //   setLoad(false);
+  // }, [load]);
 
   return (
     <Container maxWidth="md" sx={{ bgcolor: "#f8f8ff", height: "100%" }}>

@@ -7,13 +7,25 @@ import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 
 import { BoardPostModal } from "./BoardPostModal";
 import { BoardReplyPost } from "./BoardReplyPost";
 import { BoardAllPosts } from "./BoardAllPosts";
 import { Arrtype, BoardPostType } from "../../types/type";
 
-
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export const BoardPost = (props: BoardPostType) => {
   const { post, setLoad } = props;
@@ -117,7 +129,11 @@ export const BoardPost = (props: BoardPostType) => {
               {replyPosts.map((replypost, index) => {
                 return (
                   <Box key={index}>
-                    <BoardReplyPost replypost={replypost} postId={post.id} setExpand={setExpand} />
+                    <BoardReplyPost
+                      replypost={replypost}
+                      postId={post.id}
+                      setExpand={setExpand}
+                    />
                   </Box>
                 );
               })}
@@ -137,20 +153,34 @@ export const BoardPost = (props: BoardPostType) => {
 
       {/* 2択 */}
       {/* {expand && (
-        <ul style={{ listStyle: "none" }}>
+        <ul style={{ listStyle: "none", paddingLeft: 0 }}>
           {replyPosts.map((replypost, index) => {
             return (
-              <Box key={index}>
-                <BoardReplyPost replypost={replypost} postId={post.id} />
-              </Box>
+              <Modal
+                open={open}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box key={index}>
+                  <BoardReplyPost
+                    replypost={replypost}
+                    postId={post.id}
+                    setExpand={setExpand}
+                    setModal={setModal}
+                  />
+                </Box>
+              </Modal>
             );
           })}
         </ul>
       )}
       <Box sx={{ marginTop: 1 }}>
-        <Button onClick={handleOpen}>リプライボタン</Button>
-        <Button onClick={handleExpand}>
-          {expand ? <span>閉じる</span> : <span>開く</span>}
+        <Button onClick={handleOpen} sx={{ marginRight: 3 }}>
+          <ChatBubbleOutlineIcon />
+          <span style={{ marginLeft: 5 }}>{replyPosts.length}</span>
+        </Button>
+        <Button onClick={handleExpand} disabled={replyPosts.length === 0}>
+          {expand ? <span>閉じる</span> : <span>スレッドを見る</span>}
         </Button>
       </Box> */}
 
@@ -164,7 +194,7 @@ export const BoardPost = (props: BoardPostType) => {
         id={post.id}
         setOpen={setOpen}
       />
-      <BoardAllPosts />
+      {/* <BoardAllPosts /> */}
     </Box>
   );
 };
