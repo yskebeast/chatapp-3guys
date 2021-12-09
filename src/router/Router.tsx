@@ -23,7 +23,7 @@ export const Router = () => {
         </Route>
         <Route path="/selfintro">
           <SelfIntro />
-          </Route>
+        </Route>
         <Route path="/userlist">
           <UserList />
         </Route>
