@@ -3,39 +3,28 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
-
-import { AuthButton } from "../atoms/button/AuthButton";
 import { doc, setDoc } from "@firebase/firestore";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  Avatar,
+  Button,
+  Container,
+  CssBaseline,
+  TextField,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import Typography from "@mui/material/Typography";
 
-const center = {
-  width: "300px",
-  margin: "0 auto",
-};
+const theme = createTheme();
 
 export const SignUp: VFC = memo(() => {
   const history = useHistory();
-
-  // 変数にするとドキュメントのuidがundefinedになる
-  // const uid = auth.currentUser?.uid;
 
   const [name, setName] = useState<string>("");
   const [selfIntro, setSelfIntro] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
-
-  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-  const handleChangeSelfIntro = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setSelfIntro(e.target.value);
-  };
-  const handleChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-  const handleChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   const handleSignUp = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -53,52 +42,87 @@ export const SignUp: VFC = memo(() => {
   };
 
   return (
-    <div style={center}>
-      <h1>アカウントを作成</h1>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSignUp}>
-        <div>
-          <input
-            name="name"
-            type="text"
-            placeholder="名前"
-            value={name}
-            onChange={handleChangeName}
-          />
-        </div>
-        <div>
-          <textarea
-            name="text"
-            placeholder="自己紹介"
-            value={selfIntro}
-            onChange={handleChangeSelfIntro}
-          />
-        </div>
-        <div>
-          <input
-            name="email"
-            type="email"
-            placeholder="メールアドレス"
-            value={email}
-            onChange={handleChangeEmail}
-          />
-        </div>
-        <div>
-          <input
-            name="password"
-            type="password"
-            placeholder="パスワード"
-            value={password}
-            onChange={handleChangePassword}
-          />
-        </div>
-        <div>
-          <AuthButton>登録</AuthButton>
-        </div>
-        <p>
-          ログインは<Link to="/">こちら</Link>から
-        </p>
-      </form>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
+          <Typography component="h1" variant="h5">
+            アカウントを作成
+          </Typography>
+          {error && <p>{error}</p>}
+          <form onSubmit={handleSignUp}>
+            <TextField
+              required
+              fullWidth
+              sx={{ mt: 3, mb: 1 }}
+              label="名前"
+              name="name"
+              type="text"
+              value={name}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setName(e.target.value);
+              }}
+            />
+            <TextField
+              required
+              fullWidth
+              sx={{ mt: 1, mb: 1 }}
+              label="自己紹介"
+              name="selfIntro"
+              multiline
+              rows="3"
+              value={selfIntro}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                setSelfIntro(e.target.value);
+              }}
+            />
+            <TextField
+              required
+              fullWidth
+              sx={{ mt: 1, mb: 1 }}
+              label="メールアドレス"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <TextField
+              required
+              fullWidth
+              sx={{ mt: 1, mb: 2 }}
+              label="パスワード"
+              name="password"
+              type="password"
+              placeholder="パスワード"
+              value={password}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <Button
+              sx={{ mt: 1, mb: 2 }}
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              登録
+            </Button>
+            <Typography component="p" sx={{ textAlign: "right" }}>
+              ログインは<Link to="/">こちら</Link>から
+            </Typography>
+          </form>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 });
