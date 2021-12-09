@@ -11,9 +11,9 @@ import { selectUser, login, logout } from "../../features/userSlice";
 import Header from "../organisms/Header";
 
 
+
 export const Home: VFC = memo(() => {
   
-
   const buttonUser = () => {
     history.push("./userlist");
   };

@@ -5,6 +5,7 @@ import { SignIn } from "../components/pages/SignIn";
 import { SignUp } from "../components/pages/SignUp";
 import { Home } from "../components/pages/Home";
 import { Page404 } from "../components/pages/Page404";
+import { SelfIntro } from "../components/pages/SelfIntro";
 import { UserList } from "../components/pages/UserList";
 
 export const Router = () => {
@@ -20,6 +21,8 @@ export const Router = () => {
         <Route path="/home">
           <Home />
         </Route>
+        <Route path="/selfintro">
+          <SelfIntro />
         <Route path="/userlist">
           <UserList />
         </Route>
