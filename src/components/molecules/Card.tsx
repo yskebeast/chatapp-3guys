@@ -4,7 +4,16 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import Avatar from "../atoms/avatar/Avatar";
 import "./Card.css";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  setDoc,
+  query,
+  where,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import { async } from "@firebase/util";
 import { useState } from "react";
@@ -13,53 +22,75 @@ import { selectUser, userSlice } from "../../features/userSlice";
 import { useSelector } from "react-redux";
 
 type PropsType = {
+  UserDocumentId: string;
+  // id: string;
   img: string;
   name: string;
 };
 
-// urlを作る前提でやると。。
-//チャットしたい人のボタンっを押す、ランダムのドキュメントIDを作成できるようにする。
-//リンク作でdirectmessage/documentIDのURLに飛んで、そこのINPUTとボタンを作っていたら、そのDOCUMENTのIDのサブコレクション内のmessageに入れれば
-
-//URLの飛ばせ方
-
 export default function ActionAreaCard(props: PropsType) {
-  const { img, name } = props;
+  const { UserDocumentId, img, name } = props;
   const history = useHistory();
-
   const loginUser = useSelector(selectUser);
-  // console.log()
-
-  // console.log(img);
-  // console.log(name); ここは出力
-
+  const loginUserUsername = useSelector(selectUser).username;
+  const userId = console.log();
+  const yobidasi = async () => {};
   const [id, setid] = useState<string>("");
+  const LoginUserDocumentId = useSelector(selectUser).uid;
 
   const UserInformation = async () => {
-    //チャットしたい人のボタンっを押す、ランダムのドキュメントIDを作成し、ドキュメントデータに自分の名前と相手の名前を代入
-    //参照方法：((name1==tani||name2==tani) && (name1==oba||name2==oba))
-    // await setDoc(doc(db, "user", "LA"), {
-    //   name: "Los Angeles",
-    //   state: "CA",
-    //   country: "USA",
-    // });
-    const docRef = await addDoc(collection(db, "chatroom"), {
-      name1: loginUser.username,
-      name2: name,
-      id: loginUser.uid,
+    await setDoc(
+      doc(db, "chatroom", `${LoginUserDocumentId + UserDocumentId}`),
+      {
+        name: "ロロノア",
+      }
+    );
+    console.log("====================================");
+    console.log("CreateChatroom,By:" + name + "&" + loginUserUsername);
+    console.log("====================================");
+    history.push(`/directmessage/${LoginUserDocumentId + UserDocumentId}`);
+    //次のページに作成したチャットルームのIDを引数として渡す。
+  };
+
+  const SerchDocuent = async () => {
+    let CheckValue: boolean = false;
+    console.log("入ってます");
+    const q = query(collection(db, "chatroom"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log("比較する値は"); //押した人カードの名前のドキュメントIDを取得
+      console.log(
+        "========" + `${UserDocumentId + LoginUserDocumentId}` + "========"
+      );
+      console.log(
+        "========" + `${LoginUserDocumentId + UserDocumentId}` + "========"
+      );
+      console.log("---------" + doc.id + "------");
+      console.log("/////////////////");
+      if (
+        doc.id === `${UserDocumentId + LoginUserDocumentId}` ||
+        doc.id === `${LoginUserDocumentId + UserDocumentId}`
+      ) {
+        console.log("参照の文を書く。");
+        console.log("こっち動いたよん");
+        history.push(`/directmessage/${doc.id}`); //引数にname(押すボタンの名前)を渡したい。
+        CheckValue = true;
+        //次のページに作成したチャットルームのIDを引数として渡す。
+      } else {
+        console.log(doc.id);
+        console.log(`${UserDocumentId + LoginUserDocumentId}`);
+      }
     });
-    // setid(docRef.id);
-    // console.log(id);
-    console.log("Document written with ID: ", docRef.id);
-    history.push(`/directmessage/${docRef.id}`);
-    // ページ遷移
+    if (!CheckValue) {
+      UserInformation(); //chatroomで参照できなかったので、chatroom内で新規ルームを作成
+    }
   };
 
   return (
     <Card className="Card__card" sx={{ maxWidth: 250 }}>
       <Avatar />
       <CardActionArea>
-        <CardContent onClick={UserInformation}>
+        <CardContent onClick={SerchDocuent}>
           <Typography
             className="Card__card__font"
             gutterBottom

@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 
 type itemType = {
+  UserDocumentId: string;
   img: string;
   name: string;
 };
@@ -18,11 +19,10 @@ export const UserList = () => {
   const itemData: itemType[] = [];
   const [data, setData] = useState<itemType[]>();
   const loginUser = useSelector(selectUser);
-  
   const [loadingUser, setLoadingUser] = useState(true);
-  
-  console.log(loginUser.uid);
+  let UserDocumentId: string;
 
+  console.log("loginUserは：" + loginUser.uid + "ーーーーーー");
   React.useEffect(() => {
     const yobidasi = async () => {
       const querySnapshot = await getDocs(collection(db, "users"));
@@ -31,7 +31,12 @@ export const UserList = () => {
           console.log("大場春希");
         } else {
           console.log("a");
-          itemData.push({ img: doc.data().selfIntro, name: doc.data().name });
+          // UserDocumentId = doc.id;
+          itemData.push({
+            UserDocumentId: doc.id,
+            img: doc.data().selfIntro,
+            name: doc.data().name,
+          });
         }
       });
       setData(itemData);
@@ -58,10 +63,10 @@ export const UserList = () => {
         >
           {data !== undefined &&
             data.map((item) => {
-              const { img, name } = item;
+              const { UserDocumentId, img, name } = item;
               return (
                 <>
-                  <Card img={img} name={name} />
+                  <Card UserDocumentId={UserDocumentId} img={img} name={name} />
                 </>
               );
             })}
