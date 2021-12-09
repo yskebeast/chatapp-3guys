@@ -12,58 +12,33 @@ import {
   selectUser,
 } from "../../features/userSlice";
 import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
-import {
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export const SelfIntro: VFC = memo(() => {
   const loginUser = useSelector(selectUser);
   const UserName = useSelector(selectUser).username;
   const UserId = useSelector(selectUser).uid;
-  console.log("loginuserだよ  " + loginUser);
-  console.log("userNameだよ  " + UserName);
-  console.log(UserId);
+  const selfIntro = useSelector(selectUser).selfIntro;
+  const birth = useSelector(selectUser).birth;
 
   const dispach = useAppDispatch();
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [Userid, setUserid] = useState(0);
-  let CatchName: string;
-  let CatchSelfIntro: string;
-  let CatchBirth: string;
-
-  // console.log(doc(db, "users", useSelector(selectUser).uid));
-  // console.log(doc(db, "users", UserId));
 
   const change = async () => {
     const ref = doc(db, "users", UserId);
     await updateDoc(ref, {
-      name: CatchName,
-      selfIntro: CatchSelfIntro,
-      birth: CatchBirth,
+      name: UserName,
+      selfIntro: selfIntro,
+      birth: birth,
     });
     setOpen(false);
-    console.log("変更したよ");
   };
 
-  // const userRef = db.collection("users").doc("4eADonIyVHL8bdISoN5T");
-  // const UserRef = doc(db, "users", UserId);
-
-  // const EditName = async () => {
-  //   await setDoc(UserRef, {
-  //     name: "オバはるき", ここにテキストを代入
-  //   });
-  // };
   return (
     <Box sx={{ width: "60%", marginX: "auto", textAlign: "center" }}>
-      <button onClick={change}>cccc</button>
       <Typography
         component="h1"
         sx={{ fontSize: "30px", my: 3, fontWeight: "bold" }}
@@ -140,10 +115,8 @@ export const SelfIntro: VFC = memo(() => {
             <TextField
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
-              value={loginUser.username}
+              value={UserName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                // CatchName = e.target.value;
-                // console.log(CatchName);
                 dispach(changeName(e.target.value));
               }}
             />
@@ -155,14 +128,10 @@ export const SelfIntro: VFC = memo(() => {
             <TextField
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
-              value={loginUser.selfIntro}
-              onChange={
-                (e: ChangeEvent<HTMLInputElement>) => {
-                  dispach(changeSelfIntro(e.target.value));
-                  // CatchSelfIntro = e.target.value;
-                }
-                // dispach(changeSelfIntro(e.target.value))
-              }
+              value={selfIntro}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                dispach(changeSelfIntro(e.target.value));
+              }}
             />
           </Box>
           <Box sx={{ my: 3 }}>
@@ -172,16 +141,10 @@ export const SelfIntro: VFC = memo(() => {
             <TextField
               sx={{ width: "100%", marginTop: 1 }}
               type="text"
-              value={loginUser.birth}
-              onChange={
-                (e: ChangeEvent<HTMLInputElement>) => {
-                  dispach(changeBirth(e.target.value));
-                  // CatchBirth = e.target.value;
-                }
-                // console.log(e.target.value)
-                // dispach(changeBirth(e.target.value))
-                // console.log(e.targe.value)
-              }
+              value={birth}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                dispach(changeBirth(e.target.value));
+              }}
             />
           </Box>
           <Button
