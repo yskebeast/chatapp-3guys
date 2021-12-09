@@ -61,7 +61,6 @@ export const SelfIntro: VFC = memo(() => {
   //     name: "オバはるき", ここにテキストを代入
   //   });
   // };
-
   return (
     <Box sx={{ width: "60%", marginX: "auto", textAlign: "center" }}>
       <button onClick={change}>cccc</button>
