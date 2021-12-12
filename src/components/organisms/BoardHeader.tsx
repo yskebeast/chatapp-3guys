@@ -15,28 +15,28 @@ import { signOut } from "@firebase/auth";
 import { auth } from "../../firebase";
 
 export const BoardHeader = () => {
-  const loginUser = useSelector(selectUser);
-  const history = useHistory();
+   const loginUser = useSelector(selectUser);
+   const history = useHistory();
 
-  const handleLogout = () => {
-    signOut(auth).then(() => {
-      history.push("/");
-    });
-  };
+   const handleLogout = () => {
+      signOut(auth).then(() => {
+         history.push("/");
+      });
+   };
 
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-      }}
-    >
-      <p>Home</p>
-      <p>
-        {loginUser.username}
-        <span>さん</span>
-      </p>
-      <Button onClick={handleLogout}>ログアウト</Button>
-    </Box>
-  );
+   return (
+      <Box
+         sx={{
+            display: "flex",
+            justifyContent: "space-between",
+         }}
+      >
+         <p>Home</p>
+         <p>
+            {loginUser.username}
+            <span>さん</span>
+         </p>
+         <Button onClick={handleLogout}>ログアウト</Button>
+      </Box>
+   );
 };
