@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db, storage } from "../../firebase";
 import { collection, deleteDoc, doc } from "@firebase/firestore";
 import { query, orderBy, onSnapshot } from "firebase/firestore";
+import { getDownloadURL, ref } from "@firebase/storage";
 
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -13,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import { BoardPostModal } from "./BoardPostModal";
 import { BoardReplyPost } from "./BoardReplyPost";
 import { ArrReplyType, BoardPostType } from "../../types/type";
-import { getDownloadURL, ref } from "@firebase/storage";
 
 const style = {
    position: "absolute" as "absolute",
@@ -29,12 +29,18 @@ const style = {
    display: "block",
 };
 
+const avatar = {
+   width: 56,
+   height: 56,
+   marginRight: 2,
+};
+
 export const BoardPost = (props: BoardPostType) => {
    const { post, setLoad } = props;
 
    const [sideButton, setSideButton] = useState(true);
    const [replyPosts, setReplyPosts] = useState<Array<ArrReplyType>>([]);
-   const [image, setImage] = useState<any>("");
+   const [image, setImage] = useState<string>("");
    // expandはreduxにstoreしても良いかも
    const [expand, setExpand] = useState(false);
    const [open, setOpen] = React.useState(false);
@@ -77,10 +83,6 @@ export const BoardPost = (props: BoardPostType) => {
       });
    }, []);
 
-   // const handleExpand: () => void = () => {
-   //   expand ? setExpand(false) : setExpand(true);
-   // };
-
    const handleDelete: () => void = async () => {
       sideButton ? setSideButton(false) : setSideButton(true);
       if (!sideButton) {
@@ -96,7 +98,7 @@ export const BoardPost = (props: BoardPostType) => {
    return (
       <Box sx={{ borderBottom: 1 }}>
          <Box sx={{ display: "flex", paddingY: 3 }}>
-            <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
+            <Avatar sx={avatar}></Avatar>
             <Box sx={{ width: "100%" }}>
                <Box
                   sx={{
@@ -127,7 +129,7 @@ export const BoardPost = (props: BoardPostType) => {
                   {image && (
                      <img
                         src={image}
-                        style={{ width: "300px", height: "350px" }}
+                        style={{ width: "400px", objectFit: "contain" }}
                         alt=""
                      />
                   )}
@@ -177,7 +179,8 @@ export const BoardPost = (props: BoardPostType) => {
                                     src={image}
                                     style={{
                                        width: "300px",
-                                       height: "400px",
+                                       // height: "400px",
+                                       objectFit: "contain",
                                     }}
                                     alt=""
                                  />
@@ -213,7 +216,6 @@ export const BoardPost = (props: BoardPostType) => {
                      onClick={handleReplyOpen}
                      disabled={replyPosts.length === 0}
                   >
-                     {/* {expand ? <span>閉じる</span> : <span>スレッドを見る</span>} */}
                      スレッドを見る
                   </Button>
                </Box>
@@ -229,6 +231,7 @@ export const BoardPost = (props: BoardPostType) => {
             name={post.name}
             id={post.id}
             setOpen={setOpen}
+            image={image}
          />
       </Box>
    );

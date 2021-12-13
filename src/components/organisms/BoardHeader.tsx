@@ -29,13 +29,15 @@ export const BoardHeader = () => {
          sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
          }}
       >
          <p>Home</p>
-         <p>
+         <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
             {loginUser.username}
             <span>さん</span>
          </p>
+         {/* <p>掲示板</p> */}
          <Button onClick={handleLogout}>ログアウト</Button>
       </Box>
    );

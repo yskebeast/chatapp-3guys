@@ -72,7 +72,14 @@ export const BoardInputPost = (props: InputPostType) => {
    };
 
    return (
-      <Box sx={{ display: "flex", paddingY: 3, borderTop: 1, borderBottom: 1 }}>
+      <Box
+         sx={{
+            display: "flex",
+            paddingY: 3,
+            borderTop: 1,
+            // borderBottom: 1
+         }}
+      >
          <Avatar sx={{ width: 56, height: 56, marginRight: 2 }}></Avatar>
          <Box sx={{ width: "100%" }}>
             <form onSubmit={handlePost}>
@@ -80,7 +87,7 @@ export const BoardInputPost = (props: InputPostType) => {
                   type="text"
                   id="standard-multiline-flexible"
                   multiline
-                  sx={{ width: "100%" }}
+                  sx={{ width: "100%", marginBottom: 2 }}
                   inputProps={{ maxLength: 130 }}
                   placeholder="調子はどう？"
                   value={post}
@@ -91,7 +98,7 @@ export const BoardInputPost = (props: InputPostType) => {
                {fileUrl && (
                   <img
                      src={fileUrl}
-                     style={{ width: "300px", height: "300px" }}
+                     style={{ width: "400px", objectFit: "contain" }}
                      alt=""
                   />
                )}
@@ -117,10 +124,16 @@ export const BoardInputPost = (props: InputPostType) => {
                      style={{ display: "none" }}
                      onChange={onChangeImage}
                   />
-                  <p>{`${post.length} / 130`}</p>
-                  <Button type="submit" disabled={post.length === 0}>
-                     投稿
-                  </Button>
+                  <Box sx={{ display: "flex" }}>
+                     <p>{`${post.length} / 130`}</p>
+                     <Button
+                        sx={{ marginLeft: 3 }}
+                        type="submit"
+                        disabled={post.length === 0}
+                     >
+                        投稿
+                     </Button>
+                  </Box>
                </Box>
             </form>
          </Box>

@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Modal from "@mui/material/Modal";
+import Paper from "@mui/material/Paper";
 
 import { BoardHeader } from "../organisms/BoardHeader";
 import { BoardInputPost } from "../organisms/BoardInputPost";
@@ -52,34 +53,43 @@ export const Board = memo(() => {
    // }, [load]);
 
    return (
-      <Container maxWidth="md" sx={{ bgcolor: "#f8f8ff", height: "100%" }}>
-         {/* ヘッダー */}
-         <BoardHeader />
+      <Box sx={{ bgcolor: "#f0f8ff", paddingTop: 5, paddingBottom: 3 }}>
+         <CssBaseline />
 
-         {/* 投稿入力部分 */}
-         <BoardInputPost setLoad={setLoad} />
+         <Container
+            maxWidth="md"
+            sx={{ bgcolor: "white", paddingTop: 3, marginBottom: 5 }}
+         >
+            {/* ヘッダー */}
+            <BoardHeader />
 
-         {/* 投稿数が0の時に表示する画面 */}
-         {posts.length === 0 && <BoardNonPost />}
+            {/* 投稿入力部分 */}
+            <BoardInputPost setLoad={setLoad} />
+         </Container>
 
-         {/* 投稿がある時に表示する画面 */}
-         {view ? (
-            // ローティング画面
-            <Loading />
-         ) : (
-            <>
-               {/* メイン投稿 */}
-               <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-                  {posts.map((post, index) => {
-                     return (
-                        <Box key={index}>
-                           <BoardPost post={post} setLoad={setLoad} />
-                        </Box>
-                     );
-                  })}
-               </ul>
-            </>
-         )}
-      </Container>
+         <Container maxWidth="md" sx={{ bgcolor: "white", height: "100%" }}>
+            {/* 投稿数が0の時に表示する画面 */}
+            {posts.length === 0 && <BoardNonPost />}
+
+            {/* 投稿がある時に表示する画面 */}
+            {view ? (
+               // ローティング画面
+               <Loading />
+            ) : (
+               <>
+                  {/* メイン投稿 */}
+                  <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+                     {posts.map((post, index) => {
+                        return (
+                           <Box key={index}>
+                              <BoardPost post={post} setLoad={setLoad} />
+                           </Box>
+                        );
+                     })}
+                  </ul>
+               </>
+            )}
+         </Container>
+      </Box>
    );
 });

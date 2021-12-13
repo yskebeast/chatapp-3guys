@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import { doc, updateDoc } from "@firebase/firestore";
 import { db } from "../../firebase";
 import { deleteDoc } from "firebase/firestore";
+import { BoardReplyPostModalProps } from "../../types/type";
 
 const style = {
    position: "absolute" as "absolute",
@@ -19,16 +20,6 @@ const style = {
    border: "2px solid #000",
    boxShadow: 24,
    p: 4,
-};
-
-type BoardReplyPostModalProps = {
-   handleClose: () => void;
-   open: boolean;
-   replypostId: string;
-   replypost: string;
-   postId: string;
-   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-   setExpand: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const BoardReplyPostModal = (props: BoardReplyPostModalProps) => {
