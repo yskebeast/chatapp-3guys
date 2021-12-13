@@ -42,43 +42,41 @@ export default function ActionAreaCard(props: PropsType) {
     await setDoc(
       doc(db, "chatroom", `${LoginUserDocumentId + UserDocumentId}`),
       {
-        name: "ロロノア",
+        name1: loginUserUsername,
+        name2: name,
       }
     );
     console.log("====================================");
     console.log("CreateChatroom,By:" + name + "&" + loginUserUsername);
     console.log("====================================");
-    history.push(`/directmessage/${LoginUserDocumentId + UserDocumentId}`);
+    history.push(`/directmessage/${LoginUserDocumentId + UserDocumentId}`, [
+      LoginUserDocumentId + UserDocumentId,
+    ]);
     //次のページに作成したチャットルームのIDを引数として渡す。
   };
 
   const SerchDocuent = async () => {
     let CheckValue: boolean = false;
-    console.log("入ってます");
     const q = query(collection(db, "chatroom"));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      console.log("比較する値は"); //押した人カードの名前のドキュメントIDを取得
-      console.log(
-        "========" + `${UserDocumentId + LoginUserDocumentId}` + "========"
-      );
-      console.log(
-        "========" + `${LoginUserDocumentId + UserDocumentId}` + "========"
-      );
-      console.log("---------" + doc.id + "------");
-      console.log("/////////////////");
       if (
         doc.id === `${UserDocumentId + LoginUserDocumentId}` ||
         doc.id === `${LoginUserDocumentId + UserDocumentId}`
       ) {
-        console.log("参照の文を書く。");
-        console.log("こっち動いたよん");
+        console.log("_________EnterAnExitingChatroom_________");
+        // id = { chatId: doc.id };
         history.push(`/directmessage/${doc.id}`); //引数にname(押すボタンの名前)を渡したい。
+        // window.history.pushState({}, "", ""); //引数にname(押すボタンの名前)を渡したい。
         CheckValue = true;
         //次のページに作成したチャットルームのIDを引数として渡す。
       } else {
-        console.log(doc.id);
-        console.log(`${UserDocumentId + LoginUserDocumentId}`);
+        if (!CheckValue) {
+          console.log("ID参照開始__");
+          console.log(doc.id);
+          console.log(`${UserDocumentId + LoginUserDocumentId}`);
+          console.log("__ID参照終了");
+        }
       }
     });
     if (!CheckValue) {

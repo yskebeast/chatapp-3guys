@@ -27,7 +27,7 @@ export const UserList = () => {
     const yobidasi = async () => {
       const querySnapshot = await getDocs(collection(db, "users"));
       querySnapshot.forEach((doc) => {
-        if (doc.data().name == loginUser.uid) {
+        if (doc.data().name === loginUser.uid) {
           console.log("大場春希");
         } else {
           console.log("a");
