@@ -25,7 +25,7 @@ export const Router = () => {
         <Route path="/userlist">
           <UserList />
         </Route>
-        <Route path="/directmessage">
+        <Route path="/directmessage/:pageId">
           <DirectMessage />
         </Route>
       </AuthUserProvider>

@@ -8,6 +8,7 @@ import { db } from "../../firebase";
 import "./UserList.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
+import { useParams } from "react-router-dom";
 
 type itemType = {
   UserDocumentId: string;
@@ -21,6 +22,12 @@ export const UserList = () => {
   const loginUser = useSelector(selectUser);
   const [loadingUser, setLoadingUser] = useState(true);
   let UserDocumentId: string;
+
+  // ________________
+  const pageId: any = useParams();
+  console.log(pageId);
+
+  // ________________
 
   console.log("loginUserは：" + loginUser.uid + "ーーーーーー");
   React.useEffect(() => {

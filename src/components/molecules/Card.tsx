@@ -38,6 +38,9 @@ export default function ActionAreaCard(props: PropsType) {
   const [id, setid] = useState<string>("");
   const LoginUserDocumentId = useSelector(selectUser).uid;
 
+  const [roomid, setroomid] = useState<string>("");
+  console.log(roomid);
+
   const UserInformation = async () => {
     await setDoc(
       doc(db, "chatroom", `${LoginUserDocumentId + UserDocumentId}`),
@@ -49,9 +52,9 @@ export default function ActionAreaCard(props: PropsType) {
     console.log("====================================");
     console.log("CreateChatroom,By:" + name + "&" + loginUserUsername);
     console.log("====================================");
-    history.push(`/directmessage/${LoginUserDocumentId + UserDocumentId}`, [
-      LoginUserDocumentId + UserDocumentId,
-    ]);
+    const hensu = LoginUserDocumentId + UserDocumentId;
+    setroomid(hensu);
+    history.push(`/directmessage/${LoginUserDocumentId + UserDocumentId}`);
     //次のページに作成したチャットルームのIDを引数として渡す。
   };
 
@@ -66,7 +69,7 @@ export default function ActionAreaCard(props: PropsType) {
       ) {
         console.log("_________EnterAnExitingChatroom_________");
         // id = { chatId: doc.id };
-        history.push(`/directmessage/${doc.id}`); //引数にname(押すボタンの名前)を渡したい。
+        history.push(`/directmessage/${doc.id}`); 
         // window.history.pushState({}, "", ""); //引数にname(押すボタンの名前)を渡したい。
         CheckValue = true;
         //次のページに作成したチャットルームのIDを引数として渡す。

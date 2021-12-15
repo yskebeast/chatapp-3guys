@@ -9,10 +9,18 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import React from "react";
 import { db } from "../../firebase";
 import "./DirectMessage.css";
+import { useHistory, useParams } from "react-router-dom";
 
 const muiTheme = createTheme({
   palette: {
@@ -24,11 +32,19 @@ const muiTheme = createTheme({
 export const DirectMessage = () => {
   console.log();
   const [chatCtl] = React.useState(new ChatController());
+  const { pageId } = useParams<any>();
+  // パラムスでオブジェクトを取ってきている
+  console.log(pageId);
 
   const ExitingTextOutput = async () => {
-    const unsub = onSnapshot(doc(db, "chatroom", ""), (doc) => {
-      const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-      console.log(source, " data: ", doc.data());
+    const q = query(
+      collection(db, "cities", "message"),
+      where("name", "==", "大場春希")
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
     });
     await chatCtl.addMessage({
       type: "text",
@@ -37,7 +53,19 @@ export const DirectMessage = () => {
     });
   };
 
+  const yobidasi = async () => {
+    const querySnapshot = await getDocs(
+      collection(db, "chatroom", "message", pageId)
+    );
+    querySnapshot.forEach((doc) => {
+      const message = [];
+      message.push();
+    });
+  };
+  yobidasi();
+
   React.useMemo(async () => {
+    // console.log(history);
     // Chat content is displayed using ChatController
     await chatCtl.addMessage({
       type: "text",
@@ -58,10 +86,8 @@ export const DirectMessage = () => {
       },
       (response) => {
         console.log(response.value);
-        // ここから値を送る！
       }
     );
-
     console.log();
   }, [chatCtl]);
 
@@ -70,6 +96,7 @@ export const DirectMessage = () => {
   // Only one component used for display
   return (
     <div className="DirectMessage__feild">
+      {/* <p>{pageId}</p> */}
       <ThemeProvider theme={muiTheme}>
         <button> aaa</button>
         <div className="DirectMessage__Muichat">
