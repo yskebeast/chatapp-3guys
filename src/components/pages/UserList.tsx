@@ -26,7 +26,6 @@ export const UserList = () => {
   // ________________
   const pageId: any = useParams();
   console.log(pageId);
-
   // ________________
 
   console.log("loginUserは：" + loginUser.uid + "ーーーーーー");
