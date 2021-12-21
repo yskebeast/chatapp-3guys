@@ -15,10 +15,11 @@ import {
   getDoc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
-import React from "react";
+import React, { useState } from "react";
 import { db } from "../../firebase";
 import "./DirectMessage.css";
 import { useHistory, useParams } from "react-router-dom";
@@ -35,6 +36,8 @@ const muiTheme = createTheme({
 
 export const DirectMessage = () => {
   console.log();
+  const [dataPartner, setDataPartner] = useState<string[]>();
+
   const [chatCtl] = React.useState(new ChatController());
   const { pageId } = useParams<any>();
   // パラムスでオブジェクトを取ってきている
@@ -43,7 +46,9 @@ export const DirectMessage = () => {
   const loginUserUsername = useSelector(selectUser).username;
 
   let ChatPartner: string;
-
+  let i: string;
+  const chatDataPartner: string[] = [];
+  const MychatData: string[] = [];
   console.log();
   console.log(
     "ログインユーザー" + loginUser + "ユーザーネーム" + loginUserUsername
@@ -77,26 +82,25 @@ export const DirectMessage = () => {
   const ExitingTextOutput = async () => {
     const q = query(
       collection(db, "chatroom", `${pageId}`, "message"),
-      where("name", "==", `${ChatPartner}`)
+      where("name", "==", `${ChatPartner}`),
+      orderBy("timestanp", "asc")
     );
     const querySnapshot = await getDocs(q);
-    setTimeout(() => {
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id);
-        console.log(doc.data().text);
-        // console.log(doc.data);
-        chatCtl.addMessage({
-          type: "text",
-          content: "a",
-          // content: `${doc.data().text}`,
-          self: true,
-          // console.log()
-        });
-        console.log(`${doc.data().text}`);
-        console.log("aa");
-      }, 100 * 10000);
-      //   //collecitonで実行できないのでdocの取得を行い再度実行を行う。s
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data().text);
+      chatDataPartner.push(doc.data().text);
+    });
+    setDataPartner(chatDataPartner);
+
+    const w = query(
+      collection(db, "chatroom", `${pageId}`, "message"),
+      where("name", "==", `${loginUserUsername}`),
+      orderBy("timestanp", "asc")
+    );
+    const querySnapshot2 = await getDocs(w);
+    querySnapshot2.forEach((doc) => {
+      console.log(doc.data().text);
+      MychatData.push(doc.data().text);
     });
     console.log("終了");
   };
