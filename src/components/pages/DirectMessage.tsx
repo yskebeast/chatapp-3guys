@@ -37,6 +37,7 @@ const muiTheme = createTheme({
 export const DirectMessage = () => {
   console.log();
   const [dataPartner, setDataPartner] = useState<string[]>();
+  const [yourdata, setyourData] = useState<string[]>();
 
   const [chatCtl] = React.useState(new ChatController());
   const { pageId } = useParams<any>();
@@ -102,7 +103,17 @@ export const DirectMessage = () => {
       console.log(doc.data().text);
       MychatData.push(doc.data().text);
     });
-    console.log("終了");
+
+    setyourData(MychatData);
+
+    MychatData.map(async () => {
+      console.log(MychatData);
+      await chatCtl.addMessage({
+        type: "text",
+        content: `${MychatData}`,
+        self: true,
+      });
+    });
   };
   ExitingTextOutput();
 
@@ -117,6 +128,16 @@ export const DirectMessage = () => {
   // };
   // yobidasi();
 
+
+  //ここで判別を行っている。
+  const [Loading, setLoading] = useState(true)
+  React.useEffect(() => {
+    if (setyourData !== undefined) {
+      setLoading(false);
+    }
+  }, [setyourData]);
+
+
   React.useMemo(async () => {
     // console.log(history);
     // Chat content is displayed using ChatController
@@ -126,9 +147,10 @@ export const DirectMessage = () => {
       self: false,
     });
     // firebaseから自分のチャットと相手のチャットを呼び出す関数を作成する。
+    for(let i=0;i<)//この中にforで直接代入する。
     await chatCtl.addMessage({
       type: "text",
-      content: `自分のコメントになっていますか`,
+      content: `${ChatPartner}`,
       self: true,
     });
 
